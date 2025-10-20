@@ -1,0 +1,6 @@
+# Project exclude paths
+/.gradle/
+/FtcRobotController/build/
+/FtcRobotController/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/
+/TeamCode/build/
+/TeamCode/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/

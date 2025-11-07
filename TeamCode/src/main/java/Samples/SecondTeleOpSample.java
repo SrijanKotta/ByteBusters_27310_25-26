@@ -7,9 +7,10 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
-@TeleOp(name="FirstTeleOp", group="Linear OpMode")
+
+@TeleOp(name="SecondTeleOp", group="Linear OpMode")
 //@Disabled
-public class FirstTeleOpSample extends LinearOpMode {
+public class SecondTeleOpSample extends LinearOpMode {
 
     private ElapsedTime runtime = new ElapsedTime();
 
@@ -51,8 +52,11 @@ while (opModeIsActive())
 {
     double max;
     double speed = 0.6;
+    int i = 0;
+    int j = 0;
+    int k = 0;
 
-    //Canopy.setPower(40);
+    Canopy.setPower(40);
 
     if (gamepad2.dpad_up)
     {
@@ -63,7 +67,50 @@ while (opModeIsActive())
         launcher.setPower(0);
     }
 
-    
+
+    if (gamepad1.a)
+    {
+        if (i == 0)
+        {
+            AxonServo.setPower(100);
+            Canopy.setPower(40);
+            i = 1;
+        }
+        else {
+            AxonServo.setPower(0);
+            Canopy.setPower(0);
+            i = 0;
+        }
+    }
+
+    if (gamepad1.b)
+    {
+        if (j == 0)
+        {
+            AxonServo.setPower(-100);
+            j = 1;
+        }
+        else {
+            AxonServo.setPower(0);
+            j = 0;
+        }
+    }
+
+    if (gamepad1.x)
+    {
+        if (k == 0)
+        {
+            launcher.setPower(-1);
+            Canopy.setPower(40);
+            k = 1;
+        }
+        else {
+            launcher.setPower(0);
+            Canopy.setPower(0);
+            k = 0;
+        }
+    }
+
     if (gamepad1.dpad_up)
     {
         AxonServo.setPower(100);

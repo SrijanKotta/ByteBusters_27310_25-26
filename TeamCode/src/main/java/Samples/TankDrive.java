@@ -11,7 +11,8 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 @TeleOp(name="Tank Drive", group="Linear OpMode")
 //@Disabled
-public class TankDrive extends LinearOpMode {
+public class
+TankDrive extends LinearOpMode {
 
     // Declare OpMode members for each of the 4 motors.
     private ElapsedTime runtime = new ElapsedTime();
@@ -34,6 +35,7 @@ public class TankDrive extends LinearOpMode {
         Servo Rlift = hardwareMap.get(Servo.class, "Rlift");
         Servo Llift = hardwareMap.get(Servo.class, "Llift");
         Servo Sorter = hardwareMap.get(Servo.class, "Sorter");
+
 
         frontLeftDrive.setDirection(DcMotor.Direction.FORWARD);
         backLeftDrive.setDirection(DcMotor.Direction.REVERSE);

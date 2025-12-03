@@ -38,7 +38,7 @@ public class Decode_Auto1_Red_PPG extends OpMode {
     private final Pose Collect2 = new Pose(130, 60, Math.toRadians(180));
     private final Pose pickup3Pose = new Pose(100, 36, Math.toRadians(180)); // Lowest (Third Set) of Artifacts from the Spike Mark.
     private final Pose Collect3 = new Pose(130, 36, Math.toRadians(180));
-    private final Pose LeavePose = new Pose(38, 36, Math.toRadians(90)); // Leave Pose at the end of Auto.
+    private final Pose LeavePose = new Pose(100, 84, Math.toRadians(90)); // Leave Pose at the end of Auto.
 
     private Path scanTag;
     private Path scorePreload;

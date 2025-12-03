@@ -31,14 +31,14 @@ public class Decode_Auto1_Red_PPG extends OpMode {
     private final float GREEN_HUE_MAX = 145;
     private final Pose startPose = new Pose(115.5, 128, Math.toRadians(135)); // Start Pose of our robot.
     private final Pose scanPose = new Pose(72, 128, Math.toRadians(90)); // Scan Pose of our robot for april Tag. It is facing the AprilTag at a 90 degree angle.
-    private final Pose scorePose = new Pose(88, 85, Math.toRadians(135)); // Scoring Pose of our robot. It is facing the goal at a 135 degree angle.
-    private final Pose pickup1Pose = new Pose(96, 85, Math.toRadians(180)); // Highest (First Set) of Artifacts from the Spike Mark.
-    private final Pose Collect1 = new Pose(116, 85, Math.toRadians(180));
-    private final Pose pickup2Pose = new Pose(96, 60, Math.toRadians(180)); // Middle (Second Set) of Artifacts from the Spike Mark.
-    private final Pose Collect2 = new Pose(116, 60, Math.toRadians(180));
-    private final Pose pickup3Pose = new Pose(96, 35, Math.toRadians(180)); // Lowest (Third Set) of Artifacts from the Spike Mark.
-    private final Pose Collect3 = new Pose(116, 35, Math.toRadians(180));
-    private final Pose LeavePose = new Pose(105, 33, Math.toRadians(90)); // Leave Pose at the end of Auto.
+    private final Pose scorePose = new Pose(88, 84, Math.toRadians(135)); // Scoring Pose of our robot. It is facing the goal at a 135 degree angle.
+    private final Pose pickup1Pose = new Pose(100, 84, Math.toRadians(180)); // Highest (First Set) of Artifacts from the Spike Mark.
+    private final Pose Collect1 = new Pose(130, 84, Math.toRadians(180));
+    private final Pose pickup2Pose = new Pose(100, 60, Math.toRadians(180)); // Middle (Second Set) of Artifacts from the Spike Mark.
+    private final Pose Collect2 = new Pose(130, 60, Math.toRadians(180));
+    private final Pose pickup3Pose = new Pose(100, 36, Math.toRadians(180)); // Lowest (Third Set) of Artifacts from the Spike Mark.
+    private final Pose Collect3 = new Pose(130, 36, Math.toRadians(180));
+    private final Pose LeavePose = new Pose(38, 36, Math.toRadians(90)); // Leave Pose at the end of Auto.
 
     private Path scanTag;
     private Path scorePreload;

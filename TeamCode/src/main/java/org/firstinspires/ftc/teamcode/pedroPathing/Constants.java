@@ -15,7 +15,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 
 public class Constants {
     public static FollowerConstants followerConstants = new FollowerConstants()
-    .mass(5);
+    .mass(9.979);
 
     public static PathConstraints pathConstraints = new PathConstraints(0.99, 100, 1, 1);
 
@@ -26,28 +26,26 @@ public class Constants {
                 .pinpointLocalizer(localizerConstants)
                 .build();
     }
-
     public static MecanumConstants driveConstants = new MecanumConstants()
             .maxPower(1)
             .rightFrontMotorName("front_right_drive")
             .rightRearMotorName("back_right_drive")
             .leftRearMotorName("back_left_drive")
             .leftFrontMotorName("front_left_drive")
-            .leftFrontMotorDirection(DcMotorEx.Direction.REVERSE)
+            .leftFrontMotorDirection(DcMotorEx.Direction.FORWARD)
             .leftRearMotorDirection(DcMotorEx.Direction.REVERSE)
             .rightFrontMotorDirection(DcMotorEx.Direction.FORWARD)
             .rightRearMotorDirection(DcMotorEx.Direction.FORWARD);
-//            .leftFrontMotorDirection(DcMotorSimple.Direction.REVERSE)
-//            .leftRearMotorDirection(DcMotorSimple.Direction.REVERSE)
-//            .rightFrontMotorDirection(DcMotorSimple.Direction.FORWARD)
-//            .rightRearMotorDirection(DcMotorSimple.Direction.FORWARD);
+
+
 
     public static PinpointConstants localizerConstants = new PinpointConstants()
-            .forwardPodY(3)
-            .strafePodX(0.3)
+            .forwardPodY(-7.75)
+            .strafePodX(0)
             .distanceUnit(DistanceUnit.INCH)
             .hardwareMapName("pinpoint")
             .encoderResolution(GoBildaPinpointDriver.GoBildaOdometryPods.goBILDA_4_BAR_POD)
-            .forwardEncoderDirection(GoBildaPinpointDriver.EncoderDirection.FORWARD)
+            .forwardEncoderDirection(GoBildaPinpointDriver.EncoderDirection.REVERSED)
             .strafeEncoderDirection(GoBildaPinpointDriver.EncoderDirection.FORWARD);
+
 }

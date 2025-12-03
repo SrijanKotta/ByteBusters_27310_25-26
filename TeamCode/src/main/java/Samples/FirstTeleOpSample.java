@@ -115,10 +115,10 @@ while (opModeIsActive())
 
     double denominator = Math.max(Math.abs(y) + Math.abs(x) + Math.abs(rx), 1);
 
-    double frontLeftPower  = ((y + x + rx)/denominator)/1.25;
-    double frontRightPower = ((y - x - rx)/denominator)/1.25;
-    double backLeftPower   =  ((y - x + rx)/denominator);
-    double backRightPower  = ((y + x - rx)/denominator);
+    double frontLeftPower  = ((y + x + rx)/denominator)/2;
+    double frontRightPower = ((y - x - rx)/denominator)/2;
+    double backLeftPower   =  ((y - x + rx)/denominator)/2;
+    double backRightPower  = ((y + x - rx)/denominator)/2;
 
 
 

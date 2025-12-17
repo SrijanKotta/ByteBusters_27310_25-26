@@ -1,6 +1,6 @@
 package TeleOpCode;
 
-import com.bylazar.lights.RGBIndicator;
+
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.CRServo;
@@ -8,11 +8,9 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
-import com.qualcomm.robotcore.hardware.LED;
-import com.qualcomm.robotcore.hardware.Light;
-import com.qualcomm.robotcore.hardware.LightBlinker;
 import com.qualcomm.hardware.rev.RevBlinkinLedDriver;
 //Color sensor libraries
+
 import com.qualcomm.robotcore.hardware.NormalizedColorSensor;
 import com.qualcomm.robotcore.hardware.NormalizedRGBA;
 import android.graphics.Color;
@@ -23,8 +21,14 @@ public class MainTeleop extends LinearOpMode {
 
     private ElapsedTime runtime = new ElapsedTime();
     private NormalizedColorSensor colorSensor = null;
-    private final float GREEN_HUE_MIN = 80;
-    private final float GREEN_HUE_MAX = 145;
+
+//    private final float GREEN_HUE_MIN = 80;
+//    private final float GREEN_HUE_MAX = 145;
+//    private ElapsedTime pidTimer = new ElapsedTime();
+
+
+//    ColorDetection cd = new ColorDetection();
+//    ColorDetection.DetectedColor detectedColor;
 
     @Override
     public void runOpMode() throws InterruptedException {
@@ -34,7 +38,7 @@ public class MainTeleop extends LinearOpMode {
         DcMotor launcher = hardwareMap.dcMotor.get("launcher");
         DcMotor lifter = hardwareMap.dcMotor.get("Lifter");
         DcMotor bR = hardwareMap.dcMotor.get("back_right_drive");
-        CRServo AxonServo = hardwareMap.get(CRServo.class, "AxonServo");
+        DcMotor grabber = hardwareMap.dcMotor.get("grabber");
         CRServo Canopy = hardwareMap.get(CRServo.class, "Canopy");
         Servo Rlift = hardwareMap.get(Servo.class, "Rlift");
         Servo Llift = hardwareMap.get(Servo.class, "Llift");
@@ -43,8 +47,8 @@ public class MainTeleop extends LinearOpMode {
 
         // reverse the left side motors because some
         //meccanum wheels are backwards
-        //fL.setDirection(DcMotorSimple.Direction.REVERSE);
         bL.setDirection(DcMotorSimple.Direction.REVERSE);
+        bR.setDirection(DcMotorSimple.Direction.FORWARD);
         fL.setDirection(DcMotorSimple.Direction.FORWARD);
         fR.setDirection(DcMotorSimple.Direction.FORWARD);
         launcher.setDirection(DcMotorSimple.Direction.REVERSE);
@@ -55,6 +59,8 @@ public class MainTeleop extends LinearOpMode {
         bR.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
         colorSensor = hardwareMap.get(NormalizedColorSensor.class, "sensor_color");
+
+//        cd.init(hardwareMap);
 
         // Wait for the game to start (driver presses START)
         telemetry.addData("Status", "Initialized");
@@ -119,14 +125,18 @@ GamePad 1
 /*
 Color sensor code to get the values
 */
+
+
      // Get color sensor data
+
             NormalizedRGBA colors = colorSensor.getNormalizedColors();
             //NormalizedColorSensor.NormalizedRGBA colors = colorSensor.getNormalizedColors();
             float[] hsvValues = new float[3];
             Color.colorToHSV(colors.toColor(), hsvValues);
-
-
-
+/*
+            detectedColor = cd.getDetectedColor(telemetry);
+            telemetry.addData("Color Detected", detectedColor);
+*/
             // Code for Intake
             if (gamepad2.cross)
 
@@ -135,12 +145,12 @@ Color sensor code to get the values
                 {
                     if (IntakeWheel)
                     {
-                        AxonServo.setPower(0);   // Turn off Intake
+                        grabber.setPower(0);   // Turn off Intake
                         IntakeWheel = false;
                     }
                     else
                     {
-                        AxonServo.setPower(100);  // Turn on Intake
+                        grabber.setPower(-1);  // Turn on Intake
                         IntakeWheel = true;
                     }
 
@@ -150,12 +160,12 @@ Color sensor code to get the values
             {
                 if (IntakeWheel)
                 {
-                    AxonServo.setPower(0);   // Turn off Intake
+                    grabber.setPower(0);   // Turn off Intake
                     IntakeWheel = false;
                 }
                 else
                 {
-                    AxonServo.setPower(-100);  // Turn on Intake
+                    grabber.setPower(1);  // Turn on Intake
                     IntakeWheel = true;
                 }
             }
@@ -190,16 +200,30 @@ Color sensor code to get the values
             }
             // Sorter Code
 
+/*
             if (hsvValues[0] >= GREEN_HUE_MIN && hsvValues[0] <= GREEN_HUE_MAX)
-            {
-                Sorter.setPosition(0.1);
-            }
-            else
             {
                 Sorter.setPosition(0.6);
             }
+            else
+            {
+                Sorter.setPosition(0.1);
+            }
+*/
 
 /*
+
+            if (detectedColor == "GREEN")
+            {
+                Sorter.setPosition(0.6);
+            }
+            else if (detectedColor == "PURPLE")
+            {
+                Sorter.setPosition(0.1);
+            }
+
+ */
+
             if (gamepad1.square)   // Sorter Left
             {
                 Sorter.setPosition(0.1);
@@ -208,46 +232,46 @@ Color sensor code to get the values
             {
                 Sorter.setPosition(0.6);
             }
-*/
+
             if (gamepad2.dpad_up)
             {
                 launcher.setPower(0.7);
-                Light.setPattern(RevBlinkinLedDriver.BlinkinPattern.RED);
-                sleep(400);
-                Light.setPattern(RevBlinkinLedDriver.BlinkinPattern.YELLOW);
-                sleep(400);
-                Light.setPattern(RevBlinkinLedDriver.BlinkinPattern.GREEN);
+//                Light.setPattern(RevBlinkinLedDriver.BlinkinPattern.RED);
+//                sleep(400);
+//                Light.setPattern(RevBlinkinLedDriver.BlinkinPattern.YELLOW);
+//                sleep(400);
+//                Light.setPattern(RevBlinkinLedDriver.BlinkinPattern.GREEN);
 
             }
 
             if (gamepad2.dpad_down)
             {
                 launcher.setPower(0.5);
-                Light.setPattern(RevBlinkinLedDriver.BlinkinPattern.RED);
-                sleep(400);
-                Light.setPattern(RevBlinkinLedDriver.BlinkinPattern.YELLOW);
-                sleep(400);
-                Light.setPattern(RevBlinkinLedDriver.BlinkinPattern.GREEN);
+//                Light.setPattern(RevBlinkinLedDriver.BlinkinPattern.RED);
+//                sleep(400);
+//                Light.setPattern(RevBlinkinLedDriver.BlinkinPattern.YELLOW);
+//                sleep(400);
+//                Light.setPattern(RevBlinkinLedDriver.BlinkinPattern.GREEN);
             }
 
             if (gamepad2.dpad_left)
             {
                 launcher.setPower(0.6);
-                Light.setPattern(RevBlinkinLedDriver.BlinkinPattern.RED);
-                sleep(400);
-                Light.setPattern(RevBlinkinLedDriver.BlinkinPattern.YELLOW);
-                sleep(400);
-                Light.setPattern(RevBlinkinLedDriver.BlinkinPattern.GREEN);
+//                Light.setPattern(RevBlinkinLedDriver.BlinkinPattern.RED);
+//                sleep(400);
+//                Light.setPattern(RevBlinkinLedDriver.BlinkinPattern.YELLOW);
+//                sleep(400);
+//                Light.setPattern(RevBlinkinLedDriver.BlinkinPattern.GREEN);
             }
 
             if (gamepad2.dpad_right)
             {
                 launcher.setPower(0.8);
-                Light.setPattern(RevBlinkinLedDriver.BlinkinPattern.RED);
-                sleep(400);
-                Light.setPattern(RevBlinkinLedDriver.BlinkinPattern.YELLOW);
-                sleep(400);
-                Light.setPattern(RevBlinkinLedDriver.BlinkinPattern.GREEN);
+//                Light.setPattern(RevBlinkinLedDriver.BlinkinPattern.RED);
+//                sleep(400);
+//                Light.setPattern(RevBlinkinLedDriver.BlinkinPattern.YELLOW);
+//                sleep(400);
+//                Light.setPattern(RevBlinkinLedDriver.BlinkinPattern.GREEN);
             }
 /*
             if (gamepad1.dpad_right)
@@ -262,17 +286,17 @@ Color sensor code to get the values
 */
             if (gamepad2.right_bumper)
             {
-                Rlift.setPosition(1.5);
-                sleep(1000);
-                Rlift.setPosition(0.92);
-                Light.setPattern(RevBlinkinLedDriver.BlinkinPattern.RED);
+                Rlift.setPosition(.5);
+                sleep(200);
+                Rlift.setPosition(0);
+                // Light.setPattern(RevBlinkinLedDriver.BlinkinPattern.RED);
             }
             if (gamepad2.left_bumper)
             {
                 Llift.setPosition(0.01);
-                sleep(1000);
+                sleep(200);
                 Llift.setPosition(0.2) ;
-                Light.setPattern(RevBlinkinLedDriver.BlinkinPattern.RED);
+                // Light.setPattern(RevBlinkinLedDriver.BlinkinPattern.RED);
             }
 
             if (gamepad1.a)

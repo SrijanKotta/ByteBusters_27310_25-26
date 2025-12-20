@@ -226,11 +226,11 @@ Color sensor code to get the values
 
             if (gamepad1.square)   // Sorter Left
             {
-                Sorter.setPosition(0.1);
+                Sorter.setPosition(0.15);
             }
             if (gamepad1.circle)   // Sorter Right
             {
-                Sorter.setPosition(0.6);
+                Sorter.setPosition(0.62);
             }
 
             if (gamepad2.dpad_up)
@@ -286,9 +286,9 @@ Color sensor code to get the values
 */
             if (gamepad2.right_bumper)
             {
-                Rlift.setPosition(.5);
+                Rlift.setPosition(0.24);
                 sleep(200);
-                Rlift.setPosition(0);
+                Rlift.setPosition(0.05);
                 // Light.setPattern(RevBlinkinLedDriver.BlinkinPattern.RED);
             }
             if (gamepad2.left_bumper)

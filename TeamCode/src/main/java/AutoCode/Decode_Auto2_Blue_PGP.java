@@ -20,8 +20,8 @@ import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
 //import com.qualcomm.robotcore.hardware.NormalizedColorSensor;
 
 
-@Autonomous(name = "Decode_Auto1_Blue_PPG", group = "Examples")
-public class Decode_Auto1_Blue_PPG extends OpMode {
+@Autonomous(name = "Decode_Auto2_Blue_PGP", group = "Examples")
+public class Decode_Auto2_Blue_PGP extends OpMode {
     private Follower follower;
     private Timer pathTimer, actionTimer, opmodeTimer;
     private int pathState;
@@ -40,23 +40,24 @@ public class Decode_Auto1_Blue_PPG extends OpMode {
     private final float GREEN_HUE_MIN = 80;
     private final float GREEN_HUE_MAX = 145;
 
-    private final Pose startPose = new Pose(28.5, 128, Math.toRadians(135)); // Start Pose of our robot.
-    private final Pose scanPose = new Pose(72, 128, Math.toRadians(90)); // Scan Pose of our robot for april Tag. It is facing the AprilTag at a 90 degree angle.
-    private final Pose scorePose = new Pose(60, 84, Math.toRadians(130)); // Scoring Pose of our robot. It is facing the goal at a 135 degree angle.
-    private final Pose scorePose1 = new Pose(60, 84, Math.toRadians(135)); // Scoring Pose of our robot. It is facing the goal at a 135 degree angle.
-    private final Pose pickup1Pose = new Pose(44, 84, Math.toRadians(180)); // Highest (First Set) of Artifacts from the Spike Mark.
-    private final Pose Collect1_1 = new Pose(34, 84, Math.toRadians(180));
-    private final Pose Collect1_2 = new Pose(24, 84, Math.toRadians(180));
-    //    private final Pose Collect1_3 = new Pose(30, 74, Math.toRadians(90));
-//    private final Pose Collect1_4 = new Pose(24, 74, Math.toRadians(90));
-    private final Pose pickup2Pose = new Pose(44, 60, Math.toRadians(180)); // Middle (Second Set) of Artifacts from the Spike Mark.
-    private final Pose Collect2_1 = new Pose(39, 60, Math.toRadians(180));
-    private final Pose Collect2_2 = new Pose(34, 60, Math.toRadians(180));
-    private final Pose Collect2_3 = new Pose(24, 60, Math.toRadians(180));
-    private final Pose pickup3Pose = new Pose(44, 36, Math.toRadians(180)); // Lowest (Third Set) of Artifacts from the Spike Mark.
-    private final Pose Collect3_1 = new Pose(39, 36, Math.toRadians(180));
-    private final Pose Collect3_2 = new Pose(24, 36, Math.toRadians(180));
-    private final Pose LeavePose = new Pose(44, 84, Math.toRadians(180)); // Leave Pose at the end of Auto.
+    private final Pose startPose = new Pose(56, 8, Math.toRadians(90)); // Start Pose of our robot.
+
+    private final Pose scorePose = new Pose(56, 14, Math.toRadians(106.5)); // Scoring Pose of our robot. It is facing the goal at a 135 degree angle.
+    private final Pose scorePose1 = new Pose(56, 14, Math.toRadians(116.5)); // Scoring Pose of our robot. It is facing the goal at a 135 degree angle.
+
+    private final Pose pickup1Pose = new Pose(44, 36, Math.toRadians(180)); // Highest (First Set) of Artifacts from the Spike Mark.
+    private final Pose Collect1_1 = new Pose(39, 36, Math.toRadians(180));
+    private final Pose Collect1_2 = new Pose(24, 36, Math.toRadians(180));
+
+    private final Pose pickup2Pose = new Pose(44, 56, Math.toRadians(180)); // Middle (Second Set) of Artifacts from the Spike Mark.
+    private final Pose Collect2_1 = new Pose(39, 56, Math.toRadians(180));
+    private final Pose Collect2_2 = new Pose(34, 56, Math.toRadians(180));
+    private final Pose Collect2_3 = new Pose(24, 56, Math.toRadians(180));
+
+    private final Pose pickup3Pose = new Pose(44, 84, Math.toRadians(180)); // Lowest (Third Set) of Artifacts from the Spike Mark.
+    private final Pose Collect3_1 = new Pose(34, 84, Math.toRadians(180));
+    private final Pose Collect3_2 = new Pose(24, 84, Math.toRadians(180));
+    private final Pose LeavePose = new Pose(44, 36, Math.toRadians(180)); // Leave Pose at the end of Auto.
 
     //    private Path scanTag;
     private Path scorePreload;
@@ -245,7 +246,7 @@ public class Decode_Auto1_Blue_PPG extends OpMode {
         switch (pathState) {
 
             case 0:
-                launcherMotor.setPower(-0.70);
+                launcherMotor.setPower(-0.80);
                 intakeMotor.setPower(1);
                 follower.followPath(scorePreload);
                 setPathState(1);
@@ -274,6 +275,7 @@ public class Decode_Auto1_Blue_PPG extends OpMode {
                 }
 
                 /* Score Preload */
+
                 lliftServo.setPosition(0.01);
                 try {
                     sleep(1000);
@@ -282,7 +284,7 @@ public class Decode_Auto1_Blue_PPG extends OpMode {
                 }
                 lliftServo.setPosition(0.2) ;
 
-                launcherMotor.setPower(-0.75);
+                launcherMotor.setPower(-0.85);
 
                 try {
                     sleep(2000);
@@ -290,6 +292,21 @@ public class Decode_Auto1_Blue_PPG extends OpMode {
                     throw new RuntimeException(e);
                 }
 
+                rliftServo.setPosition(0.24);
+                try {
+                    sleep(1000);
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
+                rliftServo.setPosition(0.05);
+                launcherMotor.setPower(-0.80);
+
+                try {
+                    sleep(1000);
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
+
                 lliftServo.setPosition(0.01);
                 try {
                     sleep(1000);
@@ -303,23 +320,8 @@ public class Decode_Auto1_Blue_PPG extends OpMode {
                     sleep(1000);
                 } catch (InterruptedException e) {
                     throw new RuntimeException(e);
-                }                
-                rliftServo.setPosition(0.24);
-                try {
-                    sleep(1000);
-                } catch (InterruptedException e) {
-                    throw new RuntimeException(e);
                 }
-                rliftServo.setPosition(0.05);
-                launcherMotor.setPower(-0.7);
-
-                try {
-                    sleep(1000);
-                } catch (InterruptedException e) {
-                    throw new RuntimeException(e);
-                }
-
-                 /* Score Preload End*/
+                /* Score Preload End*/
                 setPathState(17);
 
                 break;
@@ -348,7 +350,7 @@ public class Decode_Auto1_Blue_PPG extends OpMode {
                 break;
             case 5:
                 Constants.driveConstants.maxPower(0.5);
-                sorterServo.setPosition(0.15); // sorter left to grab purple balls
+                sorterServo.setPosition(0.62); // sorter right to grab green ball
                 try {
                     sleep(1000);
                 } catch (InterruptedException e) {
@@ -375,7 +377,7 @@ public class Decode_Auto1_Blue_PPG extends OpMode {
                 } catch (InterruptedException e) {
                     throw new RuntimeException(e);
                 }
-                sorterServo.setPosition(0.62); // sorter right to grab green ball
+                sorterServo.setPosition(0.15); // sorter left to grab purple balls
                 try {
                     sleep(1000);
                 } catch (InterruptedException e) {
@@ -477,10 +479,25 @@ public class Decode_Auto1_Blue_PPG extends OpMode {
                 }
                 lliftServo.setPosition(0.2) ;
 
-                launcherMotor.setPower(-0.75);
+                launcherMotor.setPower(-0.85);
 
                 try {
                     sleep(2000);
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
+
+                rliftServo.setPosition(0.24);
+                try {
+                    sleep(1000);
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
+                rliftServo.setPosition(0.05);
+                launcherMotor.setPower(-0.80);
+
+                try {
+                    sleep(1000);
                 } catch (InterruptedException e) {
                     throw new RuntimeException(e);
                 }
@@ -499,21 +516,7 @@ public class Decode_Auto1_Blue_PPG extends OpMode {
                 } catch (InterruptedException e) {
                     throw new RuntimeException(e);
                 }
-                rliftServo.setPosition(0.24);
-                try {
-                    sleep(1000);
-                } catch (InterruptedException e) {
-                    throw new RuntimeException(e);
-                }
-                rliftServo.setPosition(0.05);
-                launcherMotor.setPower(-0.7);
-
-                try {
-                    sleep(1000);
-                } catch (InterruptedException e) {
-                    throw new RuntimeException(e);
-                }
-                   /* Score First Set End*/
+                    /* Score First Set End*/
 
                 setPathState(99);
 //                }
@@ -620,7 +623,7 @@ public class Decode_Auto1_Blue_PPG extends OpMode {
                 }
                 break;
             case 28:
-                launcherMotor.setPower(-0.7);
+                launcherMotor.setPower(-0.80);
                 canopyServo.setPower(-40);
 
                 try {
@@ -637,10 +640,25 @@ public class Decode_Auto1_Blue_PPG extends OpMode {
                 }
                 lliftServo.setPosition(0.2) ;
 
-                launcherMotor.setPower(-0.75);
+                launcherMotor.setPower(-0.85);
 
                 try {
                     sleep(2000);
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
+
+                rliftServo.setPosition(0.24);
+                try {
+                    sleep(1000);
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
+                rliftServo.setPosition(0.05);
+                launcherMotor.setPower(-0.80);
+
+                try {
+                    sleep(1000);
                 } catch (InterruptedException e) {
                     throw new RuntimeException(e);
                 }
@@ -659,21 +677,6 @@ public class Decode_Auto1_Blue_PPG extends OpMode {
                 } catch (InterruptedException e) {
                     throw new RuntimeException(e);
                 }
-                rliftServo.setPosition(0.24);
-                try {
-                    sleep(1000);
-                } catch (InterruptedException e) {
-                    throw new RuntimeException(e);
-                }
-                rliftServo.setPosition(0.05);
-                launcherMotor.setPower(-0.7);
-
-                try {
-                    sleep(1000);
-                } catch (InterruptedException e) {
-                    throw new RuntimeException(e);
-                }
-
                 /* Score Second Set End*/
                 setPathState(99);
 //                }
@@ -699,7 +702,7 @@ public class Decode_Auto1_Blue_PPG extends OpMode {
                 //intakeServo.setPower(100);
                 intakeMotor.setPower(1);
                 canopyServo.setPower(-40);
-                sorterServo.setPosition(0.62);
+                sorterServo.setPosition(0.15);
                 /* Since this is a pathChain, we can have Pedro hold the end point while we are scoring the sample */
                 follower.followPath(CollectSet3_1, true);
                 try {
@@ -707,7 +710,7 @@ public class Decode_Auto1_Blue_PPG extends OpMode {
                 } catch (InterruptedException e) {
                     throw new RuntimeException(e);
                 }
-                sorterServo.setPosition(0.15);
+                sorterServo.setPosition(0.62);
                 /* Since this is a pathChain, we can have Pedro hold the end point while we are scoring the sample */
                 follower.followPath(CollectSet3_2, true);
                 try {
@@ -740,7 +743,7 @@ public class Decode_Auto1_Blue_PPG extends OpMode {
                     throw new RuntimeException(e);
                 }
                 rliftServo.setPosition(0.05);
-                launcherMotor.setPower(-0.7);
+                launcherMotor.setPower(-0.80);
 
                 try {
                     sleep(1000);
@@ -757,7 +760,7 @@ public class Decode_Auto1_Blue_PPG extends OpMode {
                 }
                 lliftServo.setPosition(0.2) ;
 
-                launcherMotor.setPower(-0.7);
+                launcherMotor.setPower(-0.80);
 
                 try {
                     sleep(2000);

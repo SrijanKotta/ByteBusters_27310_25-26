@@ -1,9 +1,6 @@
 package AutoCode;
 
-
 import static java.lang.Thread.sleep;
-
-import android.graphics.Color;
 
 import com.pedropathing.follower.Follower;
 import com.pedropathing.geometry.BezierLine;
@@ -15,11 +12,13 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.NormalizedColorSensor;
-import com.qualcomm.robotcore.hardware.NormalizedRGBA;
 import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
+
+//Color sensor libraries
+//import com.qualcomm.robotcore.hardware.NormalizedColorSensor;
+
 
 @Autonomous(name = "Decode_Auto1_Red_PPG", group = "Examples")
 public class Decode_Auto1_Red_PPG extends OpMode {
@@ -27,260 +26,323 @@ public class Decode_Auto1_Red_PPG extends OpMode {
     private Timer pathTimer, actionTimer, opmodeTimer;
     private int pathState;
 
-    private final float GREEN_HUE_MIN = 80;
-    private final float GREEN_HUE_MAX = 145;
-    private final Pose startPose = new Pose(115.5, 128, Math.toRadians(135)); // Start Pose of our robot.
-    private final Pose scanPose = new Pose(72, 128, Math.toRadians(90)); // Scan Pose of our robot for april Tag. It is facing the AprilTag at a 90 degree angle.
-    private final Pose scorePose = new Pose(88, 84, Math.toRadians(135)); // Scoring Pose of our robot. It is facing the goal at a 135 degree angle.
-    private final Pose pickup1Pose = new Pose(100, 84, Math.toRadians(180)); // Highest (First Set) of Artifacts from the Spike Mark.
-    private final Pose Collect1 = new Pose(130, 84, Math.toRadians(180));
-    private final Pose pickup2Pose = new Pose(100, 60, Math.toRadians(180)); // Middle (Second Set) of Artifacts from the Spike Mark.
-    private final Pose Collect2 = new Pose(130, 60, Math.toRadians(180));
-    private final Pose pickup3Pose = new Pose(100, 36, Math.toRadians(180)); // Lowest (Third Set) of Artifacts from the Spike Mark.
-    private final Pose Collect3 = new Pose(130, 36, Math.toRadians(180));
-    private final Pose LeavePose = new Pose(100, 84, Math.toRadians(90)); // Leave Pose at the end of Auto.
+    //Declare your Servo
+//    private CRServo intakeServo;
+    private CRServo canopyServo;
+    private Servo rliftServo;
+    private Servo lliftServo;
+    private Servo sorterServo;
 
-    private Path scanTag;
+    private DcMotor launcherMotor;
+    private DcMotor intakeMotor;
+    //private NormalizedColorSensor colorSensor;
+
+//    private final float GREEN_HUE_MIN = 80;
+//    private final float GREEN_HUE_MAX = 145;
+
+
+
+    private final Pose startPose = new Pose(115.5, 128, Math.toRadians(55)); // Start Pose of our robot.
+    private final Pose scanPose = new Pose(72, 128, Math.toRadians(90)); // Scan Pose of our robot for april Tag. It is facing the AprilTag at a 90 degree angle.
+
+    private final Pose scorePose = new Pose(84, 84, Math.toRadians(50)); // Scoring Pose of our robot. It is facing the goal at a 135 degree angle.
+    private final Pose scorePose1 = new Pose(84, 84, Math.toRadians(50)); // Scoring Pose of our robot. It is facing the goal at a 135 degree angle.
+
+    //    private final Pose scorePose = new Pose(60, 84, Math.toRadians(135)); // Scoring Pose of our robot. It is facing the goal at a 135 degree angle.
+    private final Pose pickup1Pose = new Pose(106, 84, Math.toRadians(0)); // Highest (First Set) of Artifacts from the Spike Mark.
+    private final Pose Collect1_1 = new Pose(119, 84, Math.toRadians(10));
+    private final Pose Collect1_2 = new Pose(126, 84, Math.toRadians(10));
+    //    private final Pose Collect1_3 = new Pose(114, 74, Math.toRadians(90));
+//    private final Pose Collect1_4 = new Pose(120, 74, Math.toRadians(90));
+    private final Pose pickup2Pose = new Pose(106, 60, Math.toRadians(10)); // Middle (Second Set) of Artifacts from the Spike Mark.
+    private final Pose Collect2_1 = new Pose(114, 60, Math.toRadians(10));
+    private final Pose Collect2_2 = new Pose(119, 60, Math.toRadians(10));
+    private final Pose Collect2_3 = new Pose(126, 60, Math.toRadians(10));
+    private final Pose pickup3Pose = new Pose(106, 36, Math.toRadians(10)); // Lowest (Third Set) of Artifacts from the Spike Mark.
+    private final Pose Collect3_1 = new Pose(114, 36, Math.toRadians(10));
+    private final Pose Collect3_2 = new Pose(126, 36, Math.toRadians(10));
+    private final Pose LeavePose = new Pose(106, 84, Math.toRadians(10)); // Leave Pose at the end of Auto.
+
+    //    private Path scanTag;
     private Path scorePreload;
-    //private PathChain scorePreload, grabPickup1, scorePickup1, grabPickup2, scorePickup2, grabPickup3, scorePickup3, Leave;
-    private PathChain grabPickup1, CollectSet1, scorePickup1, grabPickup2, CollectSet2, scorePickup2, grabPickup3, CollectSet3, scorePickup3, Leave;
-    CRServo Intake = hardwareMap.get(CRServo.class, "AxonServo");
-    CRServo Canopy = hardwareMap.get(CRServo.class, "Canopy");
-    Servo Rlift = hardwareMap.get(Servo.class, "Rlift");
-    Servo Llift = hardwareMap.get(Servo.class, "Llift");
-    Servo Sorter = hardwareMap.get(Servo.class, "Sorter");
-    DcMotor launcher = hardwareMap.dcMotor.get("launcher");
-    NormalizedColorSensor colorSensor = hardwareMap.get(NormalizedColorSensor.class, "sensor_color");
+//    private PathChain scorePreload, grabPickup1, scorePickup1, grabPickup2, scorePickup2, grabPickup3, scorePickup3, Leave;
+    //private PathChain scorePreload1, grabPickup1, grabPickup1_1, CollectSet1_1, CollectSet1_1_1, CollectSet1_2, CollectSet1_2_1, CollectSet1_3, CollectSet1_3_1, CollectSet1_4, CollectSet1_4_1, scorePickup1, scorePickup1_1, scorePickup1_1_1, grabPickup2, grabPickup2_1, CollectSet2_1, CollectSet2_1_1, CollectSet2_2, CollectSet2_2_1, CollectSet2_3, CollectSet2_3_1, scorePickup2, scorePickup2_1, grabPickup3, CollectSet3_1, CollectSet3_2, scorePickup3, Leave;
+
+    //    private PathChain scorePreload1, grabPickup1, grabPickup1_1, CollectSet1_1, CollectSet1_1_1, CollectSet1_2, CollectSet1_2_1, CollectSet1_3, CollectSet1_3_1, CollectSet1_4, CollectSet1_4_1, scorePickup1, scorePickup1_1, grabPickup2, grabPickup2_1, CollectSet2_1, CollectSet2_1_1, CollectSet2_2, CollectSet2_2_1, CollectSet2_3, CollectSet2_3_1, scorePickup2, scorePickup2_1, grabPickup3, CollectSet3_1, CollectSet3_2, scorePickup3, Leave,Leave1;
+    private PathChain scorePreload1, grabPickup1, grabPickup1_1, CollectSet1_1, CollectSet1_1_1, CollectSet1_2, CollectSet1_2_1, scorePickup1, scorePickup1_1, grabPickup2, grabPickup2_1, CollectSet2_1, CollectSet2_1_1, CollectSet2_2, CollectSet2_2_1, CollectSet2_3, CollectSet2_3_1, scorePickup2, scorePickup2_1, grabPickup3, CollectSet3_1, CollectSet3_2, scorePickup3, Leave,Leave1;
 
     public void buildPaths() {
-    /* This is our scorePreload path. We are using a BezierLine, which is a straight line. */
-    scanTag = new Path(new BezierLine(startPose, scanPose));
-        scanTag.setLinearHeadingInterpolation(startPose.getHeading(), scanPose.getHeading());
-//    scorePreload.setLinearHeadingInterpolation(Math.toRadians(0), Math.toRadians(0));
-    /* Here is an example for Constant Interpolation
-    scorePreload.setConstantInterpolation(startPose.getHeading());
-     */
+        /* This is our scorePreload path. We are using a BezierLine, which is a straight line. */
+//    scanTag = new Path(new BezierLine(startPose, scanPose));
+//        scanTag.setLinearHeadingInterpolation(startPose.getHeading(), scanPose.getHeading());
 
-//    scorePreload = new Path(new BezierLine(startPose, scorePose));
-//    scorePreload.setLinearHeadingInterpolation(startPose.getHeading(), scorePose.getHeading());
-//    scorePreload.setLinearHeadingInterpolation(Math.toRadians(0), Math.toRadians(0));
-    /* Here is an example for Constant Interpolation
-    scorePreload.setConstantInterpolation(startPose.getHeading()); */
-
-    /* This is our grabPickup1 PathChain. We are using a single path with a BezierLine, which is a straight line. */
-/*
-    scorePreload = follower.pathBuilder()
-            .addPath(new BezierLine(scanPose, scorePose))
-            .setLinearHeadingInterpolation(scanPose.getHeading(), scorePose.getHeading())
+        scorePreload = new Path(new BezierLine(startPose, scorePose));
+        scorePreload.setLinearHeadingInterpolation(startPose.getHeading(), scorePose.getHeading());
+        /* This is our grabPickup1 PathChain. We are using a single path with a BezierLine, which is a straight line. */
+        scorePreload1 = follower.pathBuilder()
+                .addPath(new BezierLine(scorePose, scorePose1))
+                .setLinearHeadingInterpolation(scorePose.getHeading(), scorePose1.getHeading())
 //            .setLinearHeadingInterpolation(Math.toRadians(0), Math.toRadians(0))
-            .build();
-*/
+                .build();
 
-    scorePreload = new Path(new BezierLine(startPose, scorePose));
-    scorePreload.setLinearHeadingInterpolation(startPose.getHeading(), scorePose.getHeading());
-/*
-    scorePreload = follower.pathBuilder()
-            .addPath(new BezierLine(startPose, scorePose))
-            .setLinearHeadingInterpolation(startPose.getHeading(), scorePose.getHeading())
+        grabPickup1 = follower.pathBuilder()
+                .addPath(new BezierLine(scorePose1, pickup1Pose))
+                .setLinearHeadingInterpolation(scorePose1.getHeading(), pickup1Pose.getHeading())
 //            .setLinearHeadingInterpolation(Math.toRadians(0), Math.toRadians(0))
-            .build();
-*/
-    /* This is our grabPickup1 PathChain. We are using a single path with a BezierLine, which is a straight line. */
-    grabPickup1 = follower.pathBuilder()
-            .addPath(new BezierLine(scorePose, pickup1Pose))
-                .setLinearHeadingInterpolation(scorePose.getHeading(), pickup1Pose.getHeading())
-//            .setLinearHeadingInterpolation(Math.toRadians(0), Math.toRadians(0))
-            .build();
+                .build();
 
-    CollectSet1 = follower.pathBuilder()
-            .addPath(new BezierLine(pickup1Pose, Collect1))
-            .setLinearHeadingInterpolation(pickup1Pose.getHeading(), Collect1.getHeading())
+        grabPickup1_1 = follower.pathBuilder()
+                .addPath(new BezierLine(pickup1Pose, pickup1Pose))
+                .setLinearHeadingInterpolation(pickup1Pose.getHeading(), pickup1Pose.getHeading())
 //            .setLinearHeadingInterpolation(Math.toRadians(0), Math.toRadians(0))
-            .build();
+                .build();
 
-    /* This is our scorePickup1 PathChain. We are using a single path with a BezierLine, which is a straight line. */
-    scorePickup1 = follower.pathBuilder()
-            .addPath(new BezierLine(Collect1, scorePose))
-                .setLinearHeadingInterpolation(Collect1.getHeading(), scorePose.getHeading())
+        CollectSet1_1 = follower.pathBuilder()
+                .addPath(new BezierLine(pickup1Pose, Collect1_1))
+                .setLinearHeadingInterpolation(pickup1Pose.getHeading(), Collect1_1.getHeading())
 //            .setLinearHeadingInterpolation(Math.toRadians(0), Math.toRadians(0))
-            .build();
+                .build();
+        CollectSet1_1_1 = follower.pathBuilder()
+                .addPath(new BezierLine(Collect1_1, Collect1_1))
+                .setLinearHeadingInterpolation(Collect1_1.getHeading(), Collect1_1.getHeading())
+//            .setLinearHeadingInterpolation(Math.toRadians(0), Math.toRadians(0))
+                .build();
+        CollectSet1_2 = follower.pathBuilder()
+                .addPath(new BezierLine(Collect1_1, Collect1_2))
+                .setLinearHeadingInterpolation(Collect1_1.getHeading(), Collect1_2.getHeading())
+//            .setLinearHeadingInterpolation(Math.toRadians(0), Math.toRadians(0))
+                .build();
+        CollectSet1_2_1 = follower.pathBuilder()
+                .addPath(new BezierLine(Collect1_2, Collect1_2))
+                .setLinearHeadingInterpolation(Collect1_2.getHeading(), Collect1_2.getHeading())
+//            .setLinearHeadingInterpolation(Math.toRadians(0), Math.toRadians(0))
+                .build();
+//        CollectSet1_3 = follower.pathBuilder()
+//                .addPath(new BezierLine(Collect1_2, Collect1_3))
+//                .setLinearHeadingInterpolation(Collect1_2.getHeading(), Collect1_3.getHeading())
+////            .setLinearHeadingInterpolation(Math.toRadians(0), Math.toRadians(0))
+//                .build();
+//        CollectSet1_3_1 = follower.pathBuilder()
+//                .addPath(new BezierLine(Collect1_3, Collect1_3))
+//                .setLinearHeadingInterpolation(Collect1_3.getHeading(), Collect1_3.getHeading())
+////            .setLinearHeadingInterpolation(Math.toRadians(0), Math.toRadians(0))
+//                .build();
+//        CollectSet1_4 = follower.pathBuilder()
+//                .addPath(new BezierLine(Collect1_3, Collect1_4))
+//                .setLinearHeadingInterpolation(Collect1_3.getHeading(), Collect1_4.getHeading())
+////            .setLinearHeadingInterpolation(Math.toRadians(0), Math.toRadians(0))
+//                .build();
+//
+//        CollectSet1_4_1 = follower.pathBuilder()
+//                .addPath(new BezierLine(Collect1_4, Collect1_4))
+//                .setLinearHeadingInterpolation(Collect1_4.getHeading(), Collect1_4.getHeading())
+////            .setLinearHeadingInterpolation(Math.toRadians(0), Math.toRadians(0))
+//                .build();
 
-   /* This is our grabPickup2 PathChain. We are using a single path with a BezierLine, which is a straight line. */
-    grabPickup2 = follower.pathBuilder()
-            .addPath(new BezierLine(scorePose, pickup2Pose))
+        /* This is our scorePickup1 PathChain. We are using a single path with a BezierLine, which is a straight line. */
+        scorePickup1 = follower.pathBuilder()
+                .addPath(new BezierLine(Collect1_2, scorePose1))
+                .setLinearHeadingInterpolation(Collect1_2.getHeading(), scorePose.getHeading())
+//            .setLinearHeadingInterpolation(Math.toRadians(0), Math.toRadians(0))
+                .build();
+        scorePickup1_1 = follower.pathBuilder()
+                .addPath(new BezierLine(scorePose, scorePose1))
+                .setLinearHeadingInterpolation(scorePose.getHeading(), scorePose1.getHeading())
+//            .setLinearHeadingInterpolation(Math.toRadians(0), Math.toRadians(0))
+                .build();
+
+
+        /* This is our grabPickup2 PathChain. We are using a single path with a BezierLine, which is a straight line. */
+        grabPickup2 = follower.pathBuilder()
+                .addPath(new BezierLine(scorePose, pickup2Pose))
                 .setLinearHeadingInterpolation(scorePose.getHeading(), pickup2Pose.getHeading())
 //            .setLinearHeadingInterpolation(Math.toRadians(0), Math.toRadians(0))
-            .build();
+                .build();
 
-    CollectSet2 = follower.pathBuilder()
-            .addPath(new BezierLine(pickup2Pose, Collect2))
-            .setLinearHeadingInterpolation(pickup2Pose.getHeading(), Collect2.getHeading())
+        grabPickup2_1 = follower.pathBuilder()
+                .addPath(new BezierLine(pickup2Pose, pickup2Pose))
+                .setLinearHeadingInterpolation(pickup2Pose.getHeading(), pickup2Pose.getHeading())
 //            .setLinearHeadingInterpolation(Math.toRadians(0), Math.toRadians(0))
-            .build();
-    /* This is our scorePickup2 PathChain. We are using a single path with a BezierLine, which is a straight line. */
-    scorePickup2 = follower.pathBuilder()
-            .addPath(new BezierLine(Collect2, scorePose))
-                .setLinearHeadingInterpolation(Collect2.getHeading(), scorePose.getHeading())
-//            .setLinearHeadingInterpolation(Math.toRadians(0), Math.toRadians(0))
-            .build();
+                .build();
 
-    /* This is our grabPickup3 PathChain. We are using a single path with a BezierLine, which is a straight line. */
-    grabPickup3 = follower.pathBuilder()
-            .addPath(new BezierLine(scorePose, pickup3Pose))
+
+        CollectSet2_1 = follower.pathBuilder()
+                .addPath(new BezierLine(pickup2Pose, Collect2_1))
+                .setLinearHeadingInterpolation(pickup2Pose.getHeading(), Collect2_1.getHeading())
+//            .setLinearHeadingInterpolation(Math.toRadians(0), Math.toRadians(0))
+                .build();
+        CollectSet2_1_1 = follower.pathBuilder()
+                .addPath(new BezierLine(Collect2_1, Collect2_1))
+                .setLinearHeadingInterpolation(Collect2_1.getHeading(), Collect2_1.getHeading())
+//            .setLinearHeadingInterpolation(Math.toRadians(0), Math.toRadians(0))
+                .build();
+        CollectSet2_2 = follower.pathBuilder()
+                .addPath(new BezierLine(Collect2_1, Collect2_2))
+                .setLinearHeadingInterpolation(Collect2_1.getHeading(), Collect2_2.getHeading())
+//            .setLinearHeadingInterpolation(Math.toRadians(0), Math.toRadians(0))
+                .build();
+        CollectSet2_2_1 = follower.pathBuilder()
+                .addPath(new BezierLine(Collect2_2, Collect2_2))
+                .setLinearHeadingInterpolation(Collect2_2.getHeading(), Collect2_2.getHeading())
+//            .setLinearHeadingInterpolation(Math.toRadians(0), Math.toRadians(0))
+                .build();
+        CollectSet2_3 = follower.pathBuilder()
+                .addPath(new BezierLine(Collect2_2, Collect2_3))
+                .setLinearHeadingInterpolation(Collect2_2.getHeading(), Collect2_3.getHeading())
+//            .setLinearHeadingInterpolation(Math.toRadians(0), Math.toRadians(0))
+                .build();
+
+        CollectSet2_3_1 = follower.pathBuilder()
+                .addPath(new BezierLine(Collect2_3, Collect2_3))
+                .setLinearHeadingInterpolation(Collect2_3.getHeading(), Collect2_3.getHeading())
+//            .setLinearHeadingInterpolation(Math.toRadians(0), Math.toRadians(0))
+                .build();
+        /* This is our scorePickup2 PathChain. We are using a single path with a BezierLine, which is a straight line. */
+        scorePickup2 = follower.pathBuilder()
+                .addPath(new BezierLine(Collect2_3, scorePose1))
+                .setLinearHeadingInterpolation(Collect2_3.getHeading(), scorePose1.getHeading())
+//            .setLinearHeadingInterpolation(Math.toRadians(0), Math.toRadians(0))
+                .build();
+
+        scorePickup2_1 = follower.pathBuilder()
+                .addPath(new BezierLine(scorePose1, scorePose1))
+                .setLinearHeadingInterpolation(scorePose1.getHeading(), scorePose1.getHeading())
+//            .setLinearHeadingInterpolation(Math.toRadians(0), Math.toRadians(0))
+                .build();
+
+        /* This is our grabPickup3 PathChain. We are using a single path with a BezierLine, which is a straight line. */
+        grabPickup3 = follower.pathBuilder()
+                .addPath(new BezierLine(scorePose, pickup3Pose))
                 .setLinearHeadingInterpolation(scorePose.getHeading(), pickup3Pose.getHeading())
 //            .setLinearHeadingInterpolation(Math.toRadians(0), Math.toRadians(0))
-            .build();
-    CollectSet3 = follower.pathBuilder()
-            .addPath(new BezierLine(pickup3Pose, Collect3))
-            .setLinearHeadingInterpolation(pickup3Pose.getHeading(), Collect3.getHeading())
+                .build();
+        CollectSet3_1 = follower.pathBuilder()
+                .addPath(new BezierLine(pickup3Pose, Collect3_1))
+                .setLinearHeadingInterpolation(pickup3Pose.getHeading(), Collect3_1.getHeading())
 //            .setLinearHeadingInterpolation(Math.toRadians(0), Math.toRadians(0))
-            .build();
-    /* This is our scorePickup3 PathChain. We are using a single path with a BezierLine, which is a straight line. */
-    scorePickup3 = follower.pathBuilder()
-            .addPath(new BezierLine(Collect3, scorePose))
-                .setLinearHeadingInterpolation(Collect3.getHeading(), scorePose.getHeading())
+                .build();
+        CollectSet3_2 = follower.pathBuilder()
+                .addPath(new BezierLine(Collect3_1, Collect3_2))
+                .setLinearHeadingInterpolation(Collect3_1.getHeading(), Collect3_2.getHeading())
 //            .setLinearHeadingInterpolation(Math.toRadians(0), Math.toRadians(0))
-            .build();
+                .build();
+        /* This is our scorePickup3 PathChain. We are using a single path with a BezierLine, which is a straight line. */
+        scorePickup3 = follower.pathBuilder()
+                .addPath(new BezierLine(Collect3_2, scorePose))
+                .setLinearHeadingInterpolation(Collect3_2.getHeading(), scorePose.getHeading())
+//            .setLinearHeadingInterpolation(Math.toRadians(0), Math.toRadians(0))
+                .build();
 
-    Leave = follower.pathBuilder()
-            .addPath(new BezierLine(scorePose, LeavePose))
-            .setLinearHeadingInterpolation(scorePose.getHeading(), LeavePose.getHeading())
+        Leave = follower.pathBuilder()
+                .addPath(new BezierLine(scorePose1, LeavePose))
+                .setLinearHeadingInterpolation(scorePose1.getHeading(), LeavePose.getHeading())
 //            .setLinearHeadingInterpolation(Math.toRadians(0), Math.toRadians(0))
-            .build();
-}
+                .build();
+        Leave1 = follower.pathBuilder()
+                .addPath(new BezierLine(LeavePose, LeavePose))
+                .setLinearHeadingInterpolation(LeavePose.getHeading(), LeavePose.getHeading())
+//            .setLinearHeadingInterpolation(Math.toRadians(0), Math.toRadians(0))
+                .build();
+    }
 
     public void autonomousPathUpdate() {
         switch (pathState) {
+
             case 0:
+                launcherMotor.setPower(-0.7);
+                intakeMotor.setPower(1);
                 follower.followPath(scorePreload);
-                launcher.setPower(0.6);
-                Canopy.setPower(40);
-
-
-                /* Score Preload */
-                Llift.setPosition(0.01);
-                try {
-                    sleep(1000);
-                } catch (InterruptedException e) {
-                    throw new RuntimeException(e);
-                }
-                Llift.setPosition(0.2) ;
-
-                Llift.setPosition(0.01);
-                try {
-                    sleep(1000);
-                } catch (InterruptedException e) {
-                    throw new RuntimeException(e);
-                }
-                Llift.setPosition(0.2) ;
-
-                Rlift.setPosition(1.5);
-                try {
-                    sleep(1000);
-                } catch (InterruptedException e) {
-                    throw new RuntimeException(e);
-                }
-                Rlift.setPosition(0.92);
-
-                Canopy.setPower(0);
-
-                /* Score Preload End*/
                 setPathState(1);
                 break;
             case 1:
-                /* This case checks the robot's position and will wait until the robot position is close (1 inch away) from the pickup1Pose's position */
                 if (!follower.isBusy()) {
 
                     /* Since this is a pathChain, we can have Pedro hold the end point while we are scoring the sample */
-                    follower.followPath(grabPickup1, true);
+                    follower.followPath(scorePreload1, true);
                     try {
-                        sleep(2000);
+                        sleep(1000);
                     } catch (InterruptedException e) {
                         throw new RuntimeException(e);
                     }
                     setPathState(2);
                 }
                 break;
+
             case 2:
+                canopyServo.setPower(-40);
 
-            /* You could check for
-            - Follower State: "if(!follower.isBusy()) {}"
-            - Time: "if(pathTimer.getElapsedTimeSeconds() > 1) {}"
-            - Robot Position: "if(follower.getPose().getX() > 36) {}"
-            */
-
-                /* This case checks the robot's position and will wait until the robot position is close (1 inch away) from the scorePose's position */
-                if (!follower.isBusy()) {
-                    /*Start Intake Wheel*/
-                    Intake.setPower(100);
-                    Canopy.setPower(40);
-                    //launcher.setPower(0.6);
-
-                    /* Since this is a pathChain, we can have Pedro hold the end point while we are grabbing the sample */
-                    follower.followPath(CollectSet1, true);
-                    try {
-                        sleep(2000);
-                    } catch (InterruptedException e) {
-                        throw new RuntimeException(e);
-                    }
-                    Intake.setPower(0);
-                    Canopy.setPower(0);
-                    setPathState(3);
-
+                try {
+                    sleep(1500);
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
                 }
+
+                /* Score Preload */
+
+                lliftServo.setPosition(0.01);
+                try {
+                    sleep(1000);
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
+                lliftServo.setPosition(0.2) ;
+
+                launcherMotor.setPower(-0.7);
+
+                try {
+                    sleep(2000);
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
+
+                lliftServo.setPosition(0.01);
+                try {
+                    sleep(1000);
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
+                lliftServo.setPosition(0.2) ;
+
+
+                try {
+                    sleep(1000);
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
+                rliftServo.setPosition(0.24);
+                try {
+                    sleep(1000);
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
+                rliftServo.setPosition(0.05);
+                launcherMotor.setPower(-0.7);
+
+                try {
+                    sleep(1000);
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
+
+                /* Score Preload End*/
+                setPathState(3);
+
                 break;
+
             case 3:
-                /* This case checks the robot's position and will wait until the robot position is close (1 inch away) from the pickup1Pose's position */
-                if (!follower.isBusy()) {
-                    /* Stop Intake */
+                follower.followPath(grabPickup1, true);
+                /* Score Preload End*/
 
-                    /* Since this is a pathChain, we can have Pedro hold the end point while we are scoring the sample */
-                    follower.followPath(scorePickup1, true);
-                    Canopy.setPower(40);
-                    try {
-                        sleep(1000);
-                    } catch (InterruptedException e) {
-                        throw new RuntimeException(e);
-                    }
+                setPathState(4);
 
-                    /* Score First Set */
-                     Llift.setPosition(0.01);
-                    try {
-                        sleep(1000);
-                    } catch (InterruptedException e) {
-                        throw new RuntimeException(e);
-                    }
-                    Llift.setPosition(0.2) ;
-
-                    Llift.setPosition(0.01);
-                    try {
-                        sleep(1000);
-                    } catch (InterruptedException e) {
-                        throw new RuntimeException(e);
-                    }
-                    Llift.setPosition(0.2) ;
-
-                    Rlift.setPosition(1.5);
-                    try {
-                        sleep(1000);
-                    } catch (InterruptedException e) {
-                        throw new RuntimeException(e);
-                    }
-                    Rlift.setPosition(0.92);
-                    Canopy.setPower(0);
-                    /* Score First Set End*/
-
-
-
-                    setPathState(4);
-                }
                 break;
             case 4:
-                /* This case checks the robot's position and will wait until the robot position is close (1 inch away) from the scorePose's position */
+                /* This case checks the robot's position and will wait until the robot position is close (1 inch away) from the pickup1Pose's position */
                 if (!follower.isBusy()) {
 
-                    /* Since this is a pathChain, we can have Pedro hold the end point while we are grabbing the sample */
-                    follower.followPath(grabPickup2, true);
+                    /* Since this is a pathChain, we can have Pedro hold the end point while we are scoring the sample */
+                    follower.followPath(grabPickup1_1, true);
+
                     try {
                         sleep(1000);
                     } catch (InterruptedException e) {
@@ -290,166 +352,476 @@ public class Decode_Auto1_Red_PPG extends OpMode {
                 }
                 break;
             case 5:
-                /* This case checks the robot's position and will wait until the robot position is close (1 inch away) from the pickup2Pose's position */
-                if (!follower.isBusy()) {
-                    Intake.setPower(100);
-                    Canopy.setPower(40);
-                    /* Since this is a pathChain, we can have Pedro hold the end point while we are scoring the sample */
-                    follower.followPath(CollectSet2, true);
-                    try {
-                        sleep(1000);
-                    } catch (InterruptedException e) {
-                        throw new RuntimeException(e);
-                    }
-                    Intake.setPower(0);
-                    Canopy.setPower(0);
-                    setPathState(6);
+
+                /* This case checks the robot's position and will wait until the robot position is close (1 inch away) from the scorePose's position */
+//                if (!follower.isBusy()) {
+                /*Start Intake Wheel*/
+                Constants.driveConstants.maxPower(0.5);
+                sorterServo.setPosition(0.15); // sorter left to grab purple balls
+                try {
+                    sleep(1000);
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
                 }
+                /* Since this is a pathChain, we can have Pedro hold the end point while we are grabbing the sample */
+                setPathState(6);
                 break;
             case 6:
-                /* This case checks the robot's position and will wait until the robot position is close (1 inch away) from the scorePose's position */
-                if (!follower.isBusy()) {
-                    /* Since this is a pathChain, we can have Pedro hold the end point while we are grabbing the sample */
-                    follower.followPath(scorePickup2, true);
-                    Canopy.setPower(40);
-                    try {
-                        sleep(1000);
-                    } catch (InterruptedException e) {
-                        throw new RuntimeException(e);
-                    }
+                follower.followPath(CollectSet1_1, true);
 
-                    /* Score Second Set */
-
-                    Llift.setPosition(0.01);
-                    try {
-                        sleep(1000);
-                    } catch (InterruptedException e) {
-                        throw new RuntimeException(e);
-                    }
-                    Llift.setPosition(0.2) ;
-
-                    Llift.setPosition(0.01);
-                    try {
-                        sleep(1000);
-                    } catch (InterruptedException e) {
-                        throw new RuntimeException(e);
-                    }
-                    Llift.setPosition(0.2) ;
-
-                    Rlift.setPosition(1.5);
-                    try {
-                        sleep(1000);
-                    } catch (InterruptedException e) {
-                        throw new RuntimeException(e);
-                    }
-                    Rlift.setPosition(0.92);
-
-
-                    Canopy.setPower(0);
-                    /* Score Second Set End*/
-                    setPathState(7);
-                }
+                setPathState(7);
                 break;
             case 7:
-                /* This case checks the robot's position and will wait until the robot position is close (1 inch away) from the pickup3Pose's position */
                 if (!follower.isBusy()) {
 
-
                     /* Since this is a pathChain, we can have Pedro hold the end point while we are scoring the sample */
-                    follower.followPath(grabPickup3, true);
-                    try {
-                        sleep(1000);
-                    } catch (InterruptedException e) {
-                        throw new RuntimeException(e);
-                    }
-                    setPathState(8);
+
+                    follower.followPath(CollectSet1_1_1, true);
+
                 }
+                try {
+                    sleep(1000);
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
+                sorterServo.setPosition(0.62); // sorter right to grab green ball
+                try {
+                    sleep(1000);
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
+                setPathState(8);
                 break;
             case 8:
-                /* This case checks the robot's position and will wait until the robot position is close (1 inch away) from the pickup3Pose's position */
-                if (!follower.isBusy()) {
-                        Intake.setPower(100);
-                        Canopy.setPower(40);
-                        /* Since this is a pathChain, we can have Pedro hold the end point while we are scoring the sample */
-                        follower.followPath(CollectSet3, true);
-                        try {
-                            sleep(1000);
-                        } catch (InterruptedException e) {
-                            throw new RuntimeException(e);
-                        }
-                        Intake.setPower(0);
-                        Canopy.setPower(0);
-                    setPathState(9);
-                }
+                follower.followPath(CollectSet1_2, true);
+
+                setPathState(9);
                 break;
             case 9:
-                /* This case checks the robot's position and will wait until the robot position is close (1 inch away) from the scorePose's position */
                 if (!follower.isBusy()) {
-                    /* Since this is a pathChain, we can have Pedro hold the end point while we are grabbing the sample */
-                    follower.followPath(scorePickup3, true);
-                    Canopy.setPower(40);
-                    try {
-                        sleep(1000);
-                    } catch (InterruptedException e) {
-                        throw new RuntimeException(e);
-                    }
 
-                    /* Score Third Set */
+                    /* Since this is a pathChain, we can have Pedro hold the end point while we are scoring the sample */
+                    follower.followPath(CollectSet1_2_1, true);
 
-                    Llift.setPosition(0.01);
-                    try {
-                        sleep(1000);
-                    } catch (InterruptedException e) {
-                        throw new RuntimeException(e);
-                    }
-                    Llift.setPosition(0.2) ;
 
-                    Llift.setPosition(0.01);
                     try {
                         sleep(1000);
                     } catch (InterruptedException e) {
                         throw new RuntimeException(e);
                     }
-                    Llift.setPosition(0.2) ;
-                    Rlift.setPosition(1.5);
-                    try {
-                        sleep(1000);
-                    } catch (InterruptedException e) {
-                        throw new RuntimeException(e);
-                    }
-                    Rlift.setPosition(0.92);
-                    Canopy.setPower(0);
-                    launcher.setPower(0);
-                    /* Score Third Set End*/
-                    setPathState(10);
+                    Constants.driveConstants.maxPower(1);
+                    setPathState(17);
                 }
                 break;
-
             case 10:
+
+//                follower.followPath(CollectSet1_3, true);
+                setPathState(11);
+                break;
+            case 11:
+                if (!follower.isBusy()) {
+
+                    /* Since this is a pathChain, we can have Pedro hold the end point while we are scoring the sample */
+//                    follower.followPath(CollectSet1_3_1, true);
+                    setPathState(12);
+                }
+
+                break;
+            case 12:
+//                follower.followPath(CollectSet1_4, true);
+                setPathState(13);
+                break;
+            case 13:
+                if (!follower.isBusy()) {
+
+                    /* Since this is a pathChain, we can have Pedro hold the end point while we are scoring the sample */
+//                    follower.followPath(CollectSet1_4_1, true);
+
+
+                    try {
+                        sleep(1000);
+                    } catch (InterruptedException e) {
+                        throw new RuntimeException(e);
+                    }
+                    setPathState(14);
+
+                }
+                break;
+            case 14:
+                /* This case checks the robot's position and will wait until the robot position is close (1 inch away) from the pickup1Pose's position */
+//                if (!follower.isBusy()) {
+
+                /* Since this is a pathChain, we can have Pedro hold the end point while we are scoring the sample */
+                follower.followPath(scorePickup1, true);
+
+                setPathState(15);
+                break;
+            case 15:
+
+                if (!follower.isBusy()) {
+
+                    /* Since this is a pathChain, we can have Pedro hold the end point while we are scoring the sample */
+                    follower.followPath(scorePickup1_1, true);
+                    try {
+                        sleep(1000);
+                    } catch (InterruptedException e) {
+                        throw new RuntimeException(e);
+                    }
+                    setPathState(16);
+                }
+                break;
+            case 16:
+
+                try {
+                    sleep(1000);
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
+
+                /* Score Preload */
+                lliftServo.setPosition(0.01);
+                try {
+                    sleep(1000);
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
+                lliftServo.setPosition(0.2) ;
+
+                launcherMotor.setPower(-0.7);
+
+                try {
+                    sleep(2000);
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
+
+                lliftServo.setPosition(0.01);
+                try {
+                    sleep(1000);
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
+                lliftServo.setPosition(0.2) ;
+
+
+                try {
+                    sleep(1000);
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
+                rliftServo.setPosition(0.24);
+                try {
+                    sleep(1000);
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
+                rliftServo.setPosition(0.05);
+                launcherMotor.setPower(-0.7);
+
+                try {
+                    sleep(1000);
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
+                    /* Score First Set End*/
+
+                setPathState(99);
+//                }
+                break;
+            case 17:
+                follower.followPath(grabPickup2, true);
+                setPathState(18);
+                break;
+            case 18:
+                /* This case checks the robot's position and will wait until the robot position is close (1 inch away) from the scorePose's position */
+                if (!follower.isBusy()) {
+
+                    /* Since this is a pathChain, we can have Pedro hold the end point while we are grabbing the sample */
+                    follower.followPath(grabPickup2_1, true);
+                    try {
+                        sleep(1000);
+                    } catch (InterruptedException e) {
+                        throw new RuntimeException(e);
+                    }
+                    setPathState(19);
+                }
+                break;
+            case 19:
+                /* This case checks the robot's position and will wait until the robot position is close (1 inch away) from the pickup2Pose's position */
+
+                canopyServo.setPower(-40);
+                sorterServo.setPosition(0.15);
+                /* Since this is a pathChain, we can have Pedro hold the end point while we are scoring the sample */
+                setPathState(20);
+                break;
+            case 20:
+                Constants.driveConstants.maxPower(0.5);
+                follower.followPath(CollectSet2_1, true);
+                setPathState(21);
+                break;
+            case 21:
+                if (!follower.isBusy()) {
+                    follower.followPath(CollectSet2_1_1, true);
+
+                    try {
+                        sleep(1000);
+                    } catch (InterruptedException e) {
+                        throw new RuntimeException(e);
+                    }
+                    sorterServo.setPosition(0.62);
+                    /* Since this is a pathChain, we can have Pedro hold the end point while we are scoring the sample */
+                    setPathState(22);
+                }
+                break;
+            case 22:
+
+                follower.followPath(CollectSet2_2, true);
+                setPathState(23);
+                break;
+            case 23:
+
+                if (!follower.isBusy()) {
+                    follower.followPath(CollectSet2_2_1, true);
+
+
+                    try {
+                        sleep(1000);
+                    } catch (InterruptedException e) {
+                        throw new RuntimeException(e);
+                    }
+                    sorterServo.setPosition(0.15);
+                    /* Since this is a pathChain, we can have Pedro hold the end point while we are scoring the sample */
+                    setPathState(24);
+                }
+                break;
+            case 24:
+                follower.followPath(CollectSet2_3, true);
+                setPathState(25);
+                break;
+            case 25:
+                if (!follower.isBusy()) {
+                    follower.followPath(CollectSet2_3_1, true);
+
+                    try {
+                        sleep(1000);
+                    } catch (InterruptedException e) {
+                        throw new RuntimeException(e);
+                    }
+                    Constants.driveConstants.maxPower(1);
+                    setPathState(26);
+                }
+                break;
+            case 26:
+                /* This case checks the robot's position and will wait until the robot position is close (1 inch away) from the scorePose's position */
+//                if (!follower.isBusy()) {
+                /* Since this is a pathChain, we can have Pedro hold the end point while we are grabbing the sample */
+                follower.followPath(scorePickup2, true);
+                setPathState(27);
+                break;
+            case 27:
+                if (!follower.isBusy()) {
+                    follower.followPath(scorePickup2_1, true);
+                    try {
+                        sleep(1000);
+                    } catch (InterruptedException e) {
+                        throw new RuntimeException(e);
+                    }
+                    setPathState(28);
+                }
+                break;
+            case 28:
+                launcherMotor.setPower(-0.7);
+                canopyServo.setPower(-40);
+
+                try {
+                    sleep(1000);
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
+                /* Score Preload */
+                lliftServo.setPosition(0.01);
+                try {
+                    sleep(1000);
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
+                lliftServo.setPosition(0.2) ;
+
+                launcherMotor.setPower(-0.7);
+
+                try {
+                    sleep(2000);
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
+
+                lliftServo.setPosition(0.01);
+                try {
+                    sleep(1000);
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
+                lliftServo.setPosition(0.2) ;
+
+
+                try {
+                    sleep(1000);
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
+                rliftServo.setPosition(0.24);
+                try {
+                    sleep(1000);
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
+                rliftServo.setPosition(0.05);
+                launcherMotor.setPower(-0.7);
+
+                try {
+                    sleep(1000);
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
+                /* Score Second Set End*/
+                setPathState(99);
+//                }
+                break;
+            case 29:
+                /* This case checks the robot's position and will wait until the robot position is close (1 inch away) from the pickup3Pose's position */
+//                if (!follower.isBusy()) {
+
+
+                /* Since this is a pathChain, we can have Pedro hold the end point while we are scoring the sample */
+                follower.followPath(grabPickup3, true);
+                try {
+                    sleep(1000);
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
+                setPathState(99);
+//                }
+                break;
+            case 30:
+                /* This case checks the robot's position and will wait until the robot position is close (1 inch away) from the pickup3Pose's position */
+//                if (!follower.isBusy()) {
+                //intakeServo.setPower(100);
+                intakeMotor.setPower(1);
+                canopyServo.setPower(-40);
+                sorterServo.setPosition(0.62);
+                /* Since this is a pathChain, we can have Pedro hold the end point while we are scoring the sample */
+                follower.followPath(CollectSet3_1, true);
+                try {
+                    sleep(1000);
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
+                sorterServo.setPosition(0.15);
+                /* Since this is a pathChain, we can have Pedro hold the end point while we are scoring the sample */
+                follower.followPath(CollectSet3_2, true);
+                try {
+                    sleep(1000);
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
+
+                //intakeServo.setPower(0);
+                intakeMotor.setPower(0);
+                setPathState(31);
+//                }
+                break;
+            case 31:
+                /* This case checks the robot's position and will wait until the robot position is close (1 inch away) from the scorePose's position */
+//                if (!follower.isBusy()) {
+                /* Since this is a pathChain, we can have Pedro hold the end point while we are grabbing the sample */
+                follower.followPath(scorePickup3, true);
+                try {
+                    sleep(1000);
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
+
+                /* Score Preload */
+                rliftServo.setPosition(0.24);
+                try {
+                    sleep(1000);
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
+                rliftServo.setPosition(0.05);
+                launcherMotor.setPower(-0.7);
+
+                try {
+                    sleep(1000);
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
+
+
+                lliftServo.setPosition(0.01);
+                try {
+                    sleep(1000);
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
+                lliftServo.setPosition(0.2) ;
+
+                launcherMotor.setPower(-0.7);
+
+                try {
+                    sleep(2000);
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
+
+                lliftServo.setPosition(0.01);
+                try {
+                    sleep(1000);
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
+                lliftServo.setPosition(0.2) ;
+
+
+                try {
+                    sleep(1000);
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
+                canopyServo.setPower(0);
+                launcherMotor.setPower(0);
+                /* Score Third Set End*/
+                setPathState(32);
+//                }
+                break;
+
+            case 99:
+                /* This case checks the robot's position and will wait until the robot position is close (1 inch away) from the pickup3Pose's position */
+                //if (!follower.isBusy()) {
+
+                /* Since this is a pathChain, we can have Pedro hold the end point while we are scoring the sample */
+                follower.followPath(Leave, true);
+                setPathState(100);
+                //}
+                break;
+            case 100:
                 /* This case checks the robot's position and will wait until the robot position is close (1 inch away) from the pickup3Pose's position */
                 if (!follower.isBusy()) {
 
                     /* Since this is a pathChain, we can have Pedro hold the end point while we are scoring the sample */
-                    follower.followPath(Leave, true);
-                    try {
-                        sleep(1000);
-                    } catch (InterruptedException e) {
-                        throw new RuntimeException(e);
-                    }
-                    setPathState(11);
+                    follower.followPath(Leave1, true);
+                    setPathState(101);
                 }
                 break;
-            case 11:
+            case 101:
                 /* This case checks the robot's position and will wait until the robot position is close (1 inch away) from the scorePose's position */
-                if (!follower.isBusy()) {
-                    /* Set the state to a Case we won't use or define, so it just stops running an new paths */
-                    try {
-                        sleep(2000);
-                    } catch (InterruptedException e) {
-                        throw new RuntimeException(e);
-                    }
-                    setPathState(-1);
-                }
+//                if (!follower.isBusy()) {
+                /* Set the state to a Case we won't use or define, so it just stops running an new paths */
+                launcherMotor.setPower(0);
+                canopyServo.setPower(0);
+                intakeMotor.setPower(0);
+                setPathState(-1);
+//                }
 
                 break;
         }
@@ -469,6 +841,8 @@ public class Decode_Auto1_Red_PPG extends OpMode {
         follower.update();
         autonomousPathUpdate();
 
+
+
         // Feedback to Driver Hub for debugging
         telemetry.addData("path state", pathState);
         telemetry.addData("x", follower.getPose().getX());
@@ -476,29 +850,54 @@ public class Decode_Auto1_Red_PPG extends OpMode {
         telemetry.addData("heading", follower.getPose().getHeading());
         telemetry.update();
 
-        NormalizedRGBA colors = colorSensor.getNormalizedColors();
+        //NormalizedRGBA colors = colorSensor.getNormalizedColors();
         //NormalizedColorSensor.NormalizedRGBA colors = colorSensor.getNormalizedColors();
-        float[] hsvValues = new float[3];
-        Color.colorToHSV(colors.toColor(), hsvValues);
+//        float[] hsvValues = new float[3];
+//        Color.colorToHSV(colors.toColor(), hsvValues);
 
         // Sorter Code
 
-        if (hsvValues[0] >= GREEN_HUE_MIN && hsvValues[0] <= GREEN_HUE_MAX)
-        {
-            Sorter.setPosition(0.1);
-        }
-        else
-        {
-            Sorter.setPosition(0.6);
-        }
+//        if (hsvValues[0] >= GREEN_HUE_MIN && hsvValues[0] <= GREEN_HUE_MAX)
+//        {
+//            sorterServo.setPosition(0.6);
+//        }
+//        else
+//        {
+//            sorterServo.setPosition(0.1);
+//        }
+
     }
 
     /** This method is called once at the init of the OpMode. **/
     @Override
     public void init() {
+
         pathTimer = new Timer();
         opmodeTimer = new Timer();
         opmodeTimer.resetTimer();
+
+        //intakeServo = hardwareMap.get(CRServo.class,"AxonServo");
+        canopyServo = hardwareMap.get(CRServo.class, "Canopy");
+        rliftServo = hardwareMap.get(Servo.class, "Rlift");
+        lliftServo = hardwareMap.get(Servo.class, "Llift");
+        sorterServo = hardwareMap.get(Servo.class, "Sorter");
+        launcherMotor = hardwareMap.dcMotor.get("launcher");
+        intakeMotor = hardwareMap.dcMotor.get("grabber");
+
+
+
+
+        //colorSensor = hardwareMap.get(NormalizedColorSensor.class, "sensor_color");
+
+        //   cd.init(hardwareMap);
+
+/******** Setting ZeroPowerBehaviour *******/
+//        DcMotorEx fL = hardwareMap.dcMotor.get("front_left_drive");
+//        DcMotorEx fR = hardwareMap.dcMotor.get("front_right_drive");
+//        DcMotorEx bL = hardwareMap.dcMotor.get("back_left_drive");
+//        DcMotorEx bR = hardwareMap.dcMotor.get("back_right_drive");
+//        allDriveMotors = Arrays.asList(fL, fR, bL, bR); // Example motor list
+//        configureMotors(); // Apply zero power behavior to all motors
 
 
         follower = Constants.createFollower(hardwareMap);
@@ -517,6 +916,7 @@ public class Decode_Auto1_Red_PPG extends OpMode {
     @Override
     public void start() {
         opmodeTimer.resetTimer();
+
         setPathState(0);
     }
 

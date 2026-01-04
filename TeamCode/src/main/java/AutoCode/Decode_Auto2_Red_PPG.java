@@ -20,8 +20,8 @@ import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
 //import com.qualcomm.robotcore.hardware.NormalizedColorSensor;
 
 
-@Autonomous(name = "Decode_Auto1_Blue_PPG", group = "Examples")
-public class Decode_Auto1_Blue_PPG extends OpMode {
+@Autonomous(name = "Decode_Auto2_Red_PPG", group = "Examples")
+public class Decode_Auto2_Red_PPG extends OpMode {
     private Follower follower;
     private Timer pathTimer, actionTimer, opmodeTimer;
     private int pathState;
@@ -37,34 +37,38 @@ public class Decode_Auto1_Blue_PPG extends OpMode {
     private DcMotor intakeMotor;
     //private NormalizedColorSensor colorSensor;
 
-    private final float GREEN_HUE_MIN = 80;
-    private final float GREEN_HUE_MAX = 145;
+//    private final float GREEN_HUE_MIN = 80;
+//    private final float GREEN_HUE_MAX = 145;
 
-    private final Pose startPose = new Pose(28.5, 128, Math.toRadians(135)); // Start Pose of our robot.
+
+
+    private final Pose startPose = new Pose(88, 8, Math.toRadians(90)); // Start Pose of our robot.
     private final Pose scanPose = new Pose(72, 128, Math.toRadians(90)); // Scan Pose of our robot for april Tag. It is facing the AprilTag at a 90 degree angle.
-    private final Pose scorePose = new Pose(60, 84, Math.toRadians(130)); // Scoring Pose of our robot. It is facing the goal at a 135 degree angle.
-    private final Pose scorePose1 = new Pose(60, 84, Math.toRadians(135)); // Scoring Pose of our robot. It is facing the goal at a 135 degree angle.
-    private final Pose pickup1Pose = new Pose(44, 84, Math.toRadians(180)); // Highest (First Set) of Artifacts from the Spike Mark.
-    private final Pose Collect1_1 = new Pose(34, 84, Math.toRadians(180));
-    private final Pose Collect1_2 = new Pose(24, 84, Math.toRadians(180));
-    //    private final Pose Collect1_3 = new Pose(30, 74, Math.toRadians(90));
-//    private final Pose Collect1_4 = new Pose(24, 74, Math.toRadians(90));
-    private final Pose pickup2Pose = new Pose(44, 60, Math.toRadians(180)); // Middle (Second Set) of Artifacts from the Spike Mark.
-    private final Pose Collect2_1 = new Pose(39, 60, Math.toRadians(180));
-    private final Pose Collect2_2 = new Pose(34, 60, Math.toRadians(180));
-    private final Pose Collect2_3 = new Pose(24, 60, Math.toRadians(180));
-    private final Pose pickup3Pose = new Pose(44, 36, Math.toRadians(180)); // Lowest (Third Set) of Artifacts from the Spike Mark.
-    private final Pose Collect3_1 = new Pose(39, 36, Math.toRadians(180));
-    private final Pose Collect3_2 = new Pose(24, 36, Math.toRadians(180));
-    private final Pose LeavePose = new Pose(44, 84, Math.toRadians(180)); // Leave Pose at the end of Auto.
+
+    private final Pose scorePose = new Pose(88, 14, Math.toRadians(73.5)); // Scoring Pose of our robot. It is facing the goal at a 135 degree angle.
+    private final Pose scorePose1 = new Pose(88, 14, Math.toRadians(63.5)); // Scoring Pose of our robot. It is facing the goal at a 135 degree angle.
+
+    //    private final Pose scorePose = new Pose(60, 84, Math.toRadians(135)); // Scoring Pose of our robot. It is facing the goal at a 135 degree angle.
+    private final Pose pickup1Pose = new Pose(106, 36, Math.toRadians(10)); // Highest (First Set) of Artifacts from the Spike Mark.
+    private final Pose Collect1_1 = new Pose(114, 36, Math.toRadians(10));
+    private final Pose Collect1_2 = new Pose(126, 36, Math.toRadians(10));
+    //    private final Pose Collect1_3 = new Pose(114, 74, Math.toRadians(90));
+//    private final Pose Collect1_4 = new Pose(120, 74, Math.toRadians(90));
+    private final Pose pickup2Pose = new Pose(106, 60, Math.toRadians(10)); // Middle (Second Set) of Artifacts from the Spike Mark.
+    private final Pose Collect2_1 = new Pose(114, 60, Math.toRadians(10));
+    private final Pose Collect2_2 = new Pose(119, 60, Math.toRadians(10));
+    private final Pose Collect2_3 = new Pose(126, 60, Math.toRadians(10));
+    private final Pose pickup3Pose = new Pose(106, 84, Math.toRadians(10)); // Lowest (Third Set) of Artifacts from the Spike Mark.
+    private final Pose Collect3_1 = new Pose(119, 84, Math.toRadians(10));
+    private final Pose Collect3_2 = new Pose(126, 84, Math.toRadians(10));
+    private final Pose LeavePose = new Pose(106, 36, Math.toRadians(10)); // Leave Pose at the end of Auto.
 
     //    private Path scanTag;
     private Path scorePreload;
 //    private PathChain scorePreload, grabPickup1, scorePickup1, grabPickup2, scorePickup2, grabPickup3, scorePickup3, Leave;
     //private PathChain scorePreload1, grabPickup1, grabPickup1_1, CollectSet1_1, CollectSet1_1_1, CollectSet1_2, CollectSet1_2_1, CollectSet1_3, CollectSet1_3_1, CollectSet1_4, CollectSet1_4_1, scorePickup1, scorePickup1_1, scorePickup1_1_1, grabPickup2, grabPickup2_1, CollectSet2_1, CollectSet2_1_1, CollectSet2_2, CollectSet2_2_1, CollectSet2_3, CollectSet2_3_1, scorePickup2, scorePickup2_1, grabPickup3, CollectSet3_1, CollectSet3_2, scorePickup3, Leave;
 
-//    private PathChain scorePreload1, grabPickup1, grabPickup1_1, CollectSet1_1, CollectSet1_1_1, CollectSet1_2, CollectSet1_2_1, CollectSet1_3, CollectSet1_3_1, CollectSet1_4, CollectSet1_4_1, scorePickup1, scorePickup1_1, grabPickup2, grabPickup2_1, CollectSet2_1, CollectSet2_1_1, CollectSet2_2, CollectSet2_2_1, CollectSet2_3, CollectSet2_3_1, scorePickup2, scorePickup2_1, grabPickup3, CollectSet3_1, CollectSet3_2, scorePickup3, Leave,Leave1;
-
+    //    private PathChain scorePreload1, grabPickup1, grabPickup1_1, CollectSet1_1, CollectSet1_1_1, CollectSet1_2, CollectSet1_2_1, CollectSet1_3, CollectSet1_3_1, CollectSet1_4, CollectSet1_4_1, scorePickup1, scorePickup1_1, grabPickup2, grabPickup2_1, CollectSet2_1, CollectSet2_1_1, CollectSet2_2, CollectSet2_2_1, CollectSet2_3, CollectSet2_3_1, scorePickup2, scorePickup2_1, grabPickup3, CollectSet3_1, CollectSet3_2, scorePickup3, Leave,Leave1;
     private PathChain scorePreload1, grabPickup1, grabPickup1_1, CollectSet1_1, CollectSet1_1_1, CollectSet1_2, CollectSet1_2_1, scorePickup1, scorePickup1_1, grabPickup2, grabPickup2_1, CollectSet2_1, CollectSet2_1_1, CollectSet2_2, CollectSet2_2_1, CollectSet2_3, CollectSet2_3_1, scorePickup2, scorePickup2_1, grabPickup3, CollectSet3_1, CollectSet3_2, scorePickup3, Leave,Leave1;
 
     public void buildPaths() {
@@ -113,37 +117,37 @@ public class Decode_Auto1_Blue_PPG extends OpMode {
                 .setLinearHeadingInterpolation(Collect1_2.getHeading(), Collect1_2.getHeading())
 //            .setLinearHeadingInterpolation(Math.toRadians(0), Math.toRadians(0))
                 .build();
-//    CollectSet1_3 = follower.pathBuilder()
-//            .addPath(new BezierLine(Collect1_2, Collect1_3))
-//            .setLinearHeadingInterpolation(Collect1_2.getHeading(), Collect1_3.getHeading())
+//        CollectSet1_3 = follower.pathBuilder()
+//                .addPath(new BezierLine(Collect1_2, Collect1_3))
+//                .setLinearHeadingInterpolation(Collect1_2.getHeading(), Collect1_3.getHeading())
 ////            .setLinearHeadingInterpolation(Math.toRadians(0), Math.toRadians(0))
-//            .build();
-//    CollectSet1_3_1 = follower.pathBuilder()
-//            .addPath(new BezierLine(Collect1_3, Collect1_3))
-//            .setLinearHeadingInterpolation(Collect1_3.getHeading(), Collect1_3.getHeading())
+//                .build();
+//        CollectSet1_3_1 = follower.pathBuilder()
+//                .addPath(new BezierLine(Collect1_3, Collect1_3))
+//                .setLinearHeadingInterpolation(Collect1_3.getHeading(), Collect1_3.getHeading())
 ////            .setLinearHeadingInterpolation(Math.toRadians(0), Math.toRadians(0))
-//            .build();
-//    CollectSet1_4 = follower.pathBuilder()
-//            .addPath(new BezierLine(Collect1_3, Collect1_4))
-//            .setLinearHeadingInterpolation(Collect1_3.getHeading(), Collect1_4.getHeading())
+//                .build();
+//        CollectSet1_4 = follower.pathBuilder()
+//                .addPath(new BezierLine(Collect1_3, Collect1_4))
+//                .setLinearHeadingInterpolation(Collect1_3.getHeading(), Collect1_4.getHeading())
 ////            .setLinearHeadingInterpolation(Math.toRadians(0), Math.toRadians(0))
-//            .build();
+//                .build();
 //
-//    CollectSet1_4_1 = follower.pathBuilder()
-//            .addPath(new BezierLine(Collect1_4, Collect1_4))
-//            .setLinearHeadingInterpolation(Collect1_4.getHeading(), Collect1_4.getHeading())
+//        CollectSet1_4_1 = follower.pathBuilder()
+//                .addPath(new BezierLine(Collect1_4, Collect1_4))
+//                .setLinearHeadingInterpolation(Collect1_4.getHeading(), Collect1_4.getHeading())
 ////            .setLinearHeadingInterpolation(Math.toRadians(0), Math.toRadians(0))
-//            .build();
+//                .build();
 
         /* This is our scorePickup1 PathChain. We are using a single path with a BezierLine, which is a straight line. */
         scorePickup1 = follower.pathBuilder()
                 .addPath(new BezierLine(Collect1_2, scorePose1))
-                .setLinearHeadingInterpolation(Collect1_2.getHeading(), scorePose1.getHeading())
+                .setLinearHeadingInterpolation(Collect1_2.getHeading(), scorePose.getHeading())
 //            .setLinearHeadingInterpolation(Math.toRadians(0), Math.toRadians(0))
                 .build();
         scorePickup1_1 = follower.pathBuilder()
-                .addPath(new BezierLine(scorePose1, scorePose1))
-                .setLinearHeadingInterpolation(scorePose1.getHeading(), scorePose1.getHeading())
+                .addPath(new BezierLine(scorePose, scorePose1))
+                .setLinearHeadingInterpolation(scorePose.getHeading(), scorePose1.getHeading())
 //            .setLinearHeadingInterpolation(Math.toRadians(0), Math.toRadians(0))
                 .build();
 
@@ -245,7 +249,7 @@ public class Decode_Auto1_Blue_PPG extends OpMode {
         switch (pathState) {
 
             case 0:
-                launcherMotor.setPower(-0.70);
+                launcherMotor.setPower(-0.7);
                 intakeMotor.setPower(1);
                 follower.followPath(scorePreload);
                 setPathState(1);
@@ -274,6 +278,7 @@ public class Decode_Auto1_Blue_PPG extends OpMode {
                 }
 
                 /* Score Preload */
+
                 lliftServo.setPosition(0.01);
                 try {
                     sleep(1000);
@@ -282,7 +287,7 @@ public class Decode_Auto1_Blue_PPG extends OpMode {
                 }
                 lliftServo.setPosition(0.2) ;
 
-                launcherMotor.setPower(-0.75);
+                launcherMotor.setPower(-0.7);
 
                 try {
                     sleep(2000);
@@ -303,7 +308,7 @@ public class Decode_Auto1_Blue_PPG extends OpMode {
                     sleep(1000);
                 } catch (InterruptedException e) {
                     throw new RuntimeException(e);
-                }                
+                }
                 rliftServo.setPosition(0.24);
                 try {
                     sleep(1000);
@@ -319,8 +324,8 @@ public class Decode_Auto1_Blue_PPG extends OpMode {
                     throw new RuntimeException(e);
                 }
 
-                 /* Score Preload End*/
-                setPathState(17);
+                /* Score Preload End*/
+                setPathState(3);
 
                 break;
 
@@ -347,8 +352,12 @@ public class Decode_Auto1_Blue_PPG extends OpMode {
                 }
                 break;
             case 5:
+
+                /* This case checks the robot's position and will wait until the robot position is close (1 inch away) from the scorePose's position */
+//                if (!follower.isBusy()) {
+                /*Start Intake Wheel*/
                 Constants.driveConstants.maxPower(0.5);
-                sorterServo.setPosition(0.15); // sorter left to grab purple balls
+                sorterServo.setPosition(0.62); // sorter right to grab green ball
                 try {
                     sleep(1000);
                 } catch (InterruptedException e) {
@@ -375,7 +384,7 @@ public class Decode_Auto1_Blue_PPG extends OpMode {
                 } catch (InterruptedException e) {
                     throw new RuntimeException(e);
                 }
-                sorterServo.setPosition(0.62); // sorter right to grab green ball
+                sorterServo.setPosition(0.15); // sorter left to grab purple balls
                 try {
                     sleep(1000);
                 } catch (InterruptedException e) {
@@ -406,7 +415,7 @@ public class Decode_Auto1_Blue_PPG extends OpMode {
                 break;
             case 10:
 
-//                    follower.followPath(CollectSet1_3, true);
+//                follower.followPath(CollectSet1_3, true);
                 setPathState(11);
                 break;
             case 11:
@@ -462,6 +471,7 @@ public class Decode_Auto1_Blue_PPG extends OpMode {
                 }
                 break;
             case 16:
+
                 try {
                     sleep(1000);
                 } catch (InterruptedException e) {
@@ -477,7 +487,7 @@ public class Decode_Auto1_Blue_PPG extends OpMode {
                 }
                 lliftServo.setPosition(0.2) ;
 
-                launcherMotor.setPower(-0.75);
+                launcherMotor.setPower(-0.7);
 
                 try {
                     sleep(2000);
@@ -513,7 +523,7 @@ public class Decode_Auto1_Blue_PPG extends OpMode {
                 } catch (InterruptedException e) {
                     throw new RuntimeException(e);
                 }
-                   /* Score First Set End*/
+                    /* Score First Set End*/
 
                 setPathState(99);
 //                }
@@ -637,7 +647,7 @@ public class Decode_Auto1_Blue_PPG extends OpMode {
                 }
                 lliftServo.setPosition(0.2) ;
 
-                launcherMotor.setPower(-0.75);
+                launcherMotor.setPower(-0.7);
 
                 try {
                     sleep(2000);
@@ -673,7 +683,6 @@ public class Decode_Auto1_Blue_PPG extends OpMode {
                 } catch (InterruptedException e) {
                     throw new RuntimeException(e);
                 }
-
                 /* Score Second Set End*/
                 setPathState(99);
 //                }
@@ -699,7 +708,7 @@ public class Decode_Auto1_Blue_PPG extends OpMode {
                 //intakeServo.setPower(100);
                 intakeMotor.setPower(1);
                 canopyServo.setPower(-40);
-                sorterServo.setPosition(0.62);
+                sorterServo.setPosition(0.15);
                 /* Since this is a pathChain, we can have Pedro hold the end point while we are scoring the sample */
                 follower.followPath(CollectSet3_1, true);
                 try {
@@ -707,7 +716,7 @@ public class Decode_Auto1_Blue_PPG extends OpMode {
                 } catch (InterruptedException e) {
                     throw new RuntimeException(e);
                 }
-                sorterServo.setPosition(0.15);
+                sorterServo.setPosition(0.62);
                 /* Since this is a pathChain, we can have Pedro hold the end point while we are scoring the sample */
                 follower.followPath(CollectSet3_2, true);
                 try {
@@ -733,22 +742,6 @@ public class Decode_Auto1_Blue_PPG extends OpMode {
                 }
 
                 /* Score Preload */
-                rliftServo.setPosition(0.24);
-                try {
-                    sleep(1000);
-                } catch (InterruptedException e) {
-                    throw new RuntimeException(e);
-                }
-                rliftServo.setPosition(0.05);
-                launcherMotor.setPower(-0.7);
-
-                try {
-                    sleep(1000);
-                } catch (InterruptedException e) {
-                    throw new RuntimeException(e);
-                }
-
-
                 lliftServo.setPosition(0.01);
                 try {
                     sleep(1000);
@@ -773,6 +766,20 @@ public class Decode_Auto1_Blue_PPG extends OpMode {
                 }
                 lliftServo.setPosition(0.2) ;
 
+
+                try {
+                    sleep(1000);
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
+                rliftServo.setPosition(0.24);
+                try {
+                    sleep(1000);
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
+                rliftServo.setPosition(0.05);
+                launcherMotor.setPower(-0.7);
 
                 try {
                     sleep(1000);

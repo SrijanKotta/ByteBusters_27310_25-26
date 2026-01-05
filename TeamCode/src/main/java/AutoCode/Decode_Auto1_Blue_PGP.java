@@ -27,7 +27,6 @@ public class Decode_Auto1_Blue_PGP extends OpMode {
     private int pathState;
 
     //Declare your Servo
-//    private CRServo intakeServo;
     private CRServo canopyServo;
     private Servo rliftServo;
     private Servo lliftServo;
@@ -78,73 +77,60 @@ public class Decode_Auto1_Blue_PGP extends OpMode {
         scorePreload1 = follower.pathBuilder()
                 .addPath(new BezierLine(scorePose, scorePose1))
                 .setLinearHeadingInterpolation(scorePose.getHeading(), scorePose1.getHeading())
-//            .setLinearHeadingInterpolation(Math.toRadians(0), Math.toRadians(0))
                 .build();
 
         grabPickup1 = follower.pathBuilder()
                 .addPath(new BezierLine(scorePose1, pickup1Pose))
                 .setLinearHeadingInterpolation(scorePose1.getHeading(), pickup1Pose.getHeading())
-//            .setLinearHeadingInterpolation(Math.toRadians(0), Math.toRadians(0))
                 .build();
 
         grabPickup1_1 = follower.pathBuilder()
                 .addPath(new BezierLine(pickup1Pose, pickup1Pose))
                 .setLinearHeadingInterpolation(pickup1Pose.getHeading(), pickup1Pose.getHeading())
-//            .setLinearHeadingInterpolation(Math.toRadians(0), Math.toRadians(0))
                 .build();
 
         CollectSet1_1 = follower.pathBuilder()
                 .addPath(new BezierLine(pickup1Pose, Collect1_1))
                 .setLinearHeadingInterpolation(pickup1Pose.getHeading(), Collect1_1.getHeading())
-//            .setLinearHeadingInterpolation(Math.toRadians(0), Math.toRadians(0))
                 .build();
         CollectSet1_1_1 = follower.pathBuilder()
                 .addPath(new BezierLine(Collect1_1, Collect1_1))
                 .setLinearHeadingInterpolation(Collect1_1.getHeading(), Collect1_1.getHeading())
-//            .setLinearHeadingInterpolation(Math.toRadians(0), Math.toRadians(0))
                 .build();
         CollectSet1_2 = follower.pathBuilder()
                 .addPath(new BezierLine(Collect1_1, Collect1_2))
                 .setLinearHeadingInterpolation(Collect1_1.getHeading(), Collect1_2.getHeading())
-//            .setLinearHeadingInterpolation(Math.toRadians(0), Math.toRadians(0))
                 .build();
         CollectSet1_2_1 = follower.pathBuilder()
                 .addPath(new BezierLine(Collect1_2, Collect1_2))
                 .setLinearHeadingInterpolation(Collect1_2.getHeading(), Collect1_2.getHeading())
-//            .setLinearHeadingInterpolation(Math.toRadians(0), Math.toRadians(0))
                 .build();
 //    CollectSet1_3 = follower.pathBuilder()
 //            .addPath(new BezierLine(Collect1_2, Collect1_3))
 //            .setLinearHeadingInterpolation(Collect1_2.getHeading(), Collect1_3.getHeading())
-////            .setLinearHeadingInterpolation(Math.toRadians(0), Math.toRadians(0))
 //            .build();
 //    CollectSet1_3_1 = follower.pathBuilder()
 //            .addPath(new BezierLine(Collect1_3, Collect1_3))
 //            .setLinearHeadingInterpolation(Collect1_3.getHeading(), Collect1_3.getHeading())
-////            .setLinearHeadingInterpolation(Math.toRadians(0), Math.toRadians(0))
 //            .build();
 //    CollectSet1_4 = follower.pathBuilder()
 //            .addPath(new BezierLine(Collect1_3, Collect1_4))
 //            .setLinearHeadingInterpolation(Collect1_3.getHeading(), Collect1_4.getHeading())
-////            .setLinearHeadingInterpolation(Math.toRadians(0), Math.toRadians(0))
 //            .build();
 //
 //    CollectSet1_4_1 = follower.pathBuilder()
 //            .addPath(new BezierLine(Collect1_4, Collect1_4))
 //            .setLinearHeadingInterpolation(Collect1_4.getHeading(), Collect1_4.getHeading())
-////            .setLinearHeadingInterpolation(Math.toRadians(0), Math.toRadians(0))
 //            .build();
 
         /* This is our scorePickup1 PathChain. We are using a single path with a BezierLine, which is a straight line. */
         scorePickup1 = follower.pathBuilder()
                 .addPath(new BezierLine(Collect1_2, scorePose1))
                 .setLinearHeadingInterpolation(Collect1_2.getHeading(), scorePose1.getHeading())
-//            .setLinearHeadingInterpolation(Math.toRadians(0), Math.toRadians(0))
                 .build();
         scorePickup1_1 = follower.pathBuilder()
                 .addPath(new BezierLine(scorePose1, scorePose1))
                 .setLinearHeadingInterpolation(scorePose1.getHeading(), scorePose1.getHeading())
-//            .setLinearHeadingInterpolation(Math.toRadians(0), Math.toRadians(0))
                 .build();
 
 
@@ -152,92 +138,76 @@ public class Decode_Auto1_Blue_PGP extends OpMode {
         grabPickup2 = follower.pathBuilder()
                 .addPath(new BezierLine(scorePose, pickup2Pose))
                 .setLinearHeadingInterpolation(scorePose.getHeading(), pickup2Pose.getHeading())
-//            .setLinearHeadingInterpolation(Math.toRadians(0), Math.toRadians(0))
                 .build();
 
         grabPickup2_1 = follower.pathBuilder()
                 .addPath(new BezierLine(pickup2Pose, pickup2Pose))
                 .setLinearHeadingInterpolation(pickup2Pose.getHeading(), pickup2Pose.getHeading())
-//            .setLinearHeadingInterpolation(Math.toRadians(0), Math.toRadians(0))
                 .build();
 
 
         CollectSet2_1 = follower.pathBuilder()
                 .addPath(new BezierLine(pickup2Pose, Collect2_1))
                 .setLinearHeadingInterpolation(pickup2Pose.getHeading(), Collect2_1.getHeading())
-//            .setLinearHeadingInterpolation(Math.toRadians(0), Math.toRadians(0))
                 .build();
         CollectSet2_1_1 = follower.pathBuilder()
                 .addPath(new BezierLine(Collect2_1, Collect2_1))
                 .setLinearHeadingInterpolation(Collect2_1.getHeading(), Collect2_1.getHeading())
-//            .setLinearHeadingInterpolation(Math.toRadians(0), Math.toRadians(0))
                 .build();
         CollectSet2_2 = follower.pathBuilder()
                 .addPath(new BezierLine(Collect2_1, Collect2_2))
                 .setLinearHeadingInterpolation(Collect2_1.getHeading(), Collect2_2.getHeading())
-//            .setLinearHeadingInterpolation(Math.toRadians(0), Math.toRadians(0))
                 .build();
         CollectSet2_2_1 = follower.pathBuilder()
                 .addPath(new BezierLine(Collect2_2, Collect2_2))
                 .setLinearHeadingInterpolation(Collect2_2.getHeading(), Collect2_2.getHeading())
-//            .setLinearHeadingInterpolation(Math.toRadians(0), Math.toRadians(0))
                 .build();
         CollectSet2_3 = follower.pathBuilder()
                 .addPath(new BezierLine(Collect2_2, Collect2_3))
                 .setLinearHeadingInterpolation(Collect2_2.getHeading(), Collect2_3.getHeading())
-//            .setLinearHeadingInterpolation(Math.toRadians(0), Math.toRadians(0))
                 .build();
 
         CollectSet2_3_1 = follower.pathBuilder()
                 .addPath(new BezierLine(Collect2_3, Collect2_3))
                 .setLinearHeadingInterpolation(Collect2_3.getHeading(), Collect2_3.getHeading())
-//            .setLinearHeadingInterpolation(Math.toRadians(0), Math.toRadians(0))
                 .build();
         /* This is our scorePickup2 PathChain. We are using a single path with a BezierLine, which is a straight line. */
         scorePickup2 = follower.pathBuilder()
                 .addPath(new BezierLine(Collect2_3, scorePose1))
                 .setLinearHeadingInterpolation(Collect2_3.getHeading(), scorePose1.getHeading())
-//            .setLinearHeadingInterpolation(Math.toRadians(0), Math.toRadians(0))
                 .build();
 
         scorePickup2_1 = follower.pathBuilder()
                 .addPath(new BezierLine(scorePose1, scorePose1))
                 .setLinearHeadingInterpolation(scorePose1.getHeading(), scorePose1.getHeading())
-//            .setLinearHeadingInterpolation(Math.toRadians(0), Math.toRadians(0))
                 .build();
 
         /* This is our grabPickup3 PathChain. We are using a single path with a BezierLine, which is a straight line. */
         grabPickup3 = follower.pathBuilder()
                 .addPath(new BezierLine(scorePose, pickup3Pose))
                 .setLinearHeadingInterpolation(scorePose.getHeading(), pickup3Pose.getHeading())
-//            .setLinearHeadingInterpolation(Math.toRadians(0), Math.toRadians(0))
                 .build();
         CollectSet3_1 = follower.pathBuilder()
                 .addPath(new BezierLine(pickup3Pose, Collect3_1))
                 .setLinearHeadingInterpolation(pickup3Pose.getHeading(), Collect3_1.getHeading())
-//            .setLinearHeadingInterpolation(Math.toRadians(0), Math.toRadians(0))
                 .build();
         CollectSet3_2 = follower.pathBuilder()
                 .addPath(new BezierLine(Collect3_1, Collect3_2))
                 .setLinearHeadingInterpolation(Collect3_1.getHeading(), Collect3_2.getHeading())
-//            .setLinearHeadingInterpolation(Math.toRadians(0), Math.toRadians(0))
                 .build();
         /* This is our scorePickup3 PathChain. We are using a single path with a BezierLine, which is a straight line. */
         scorePickup3 = follower.pathBuilder()
                 .addPath(new BezierLine(Collect3_2, scorePose))
                 .setLinearHeadingInterpolation(Collect3_2.getHeading(), scorePose.getHeading())
-//            .setLinearHeadingInterpolation(Math.toRadians(0), Math.toRadians(0))
                 .build();
 
         Leave = follower.pathBuilder()
                 .addPath(new BezierLine(scorePose1, LeavePose))
                 .setLinearHeadingInterpolation(scorePose1.getHeading(), LeavePose.getHeading())
-//            .setLinearHeadingInterpolation(Math.toRadians(0), Math.toRadians(0))
                 .build();
         Leave1 = follower.pathBuilder()
                 .addPath(new BezierLine(LeavePose, LeavePose))
                 .setLinearHeadingInterpolation(LeavePose.getHeading(), LeavePose.getHeading())
-//            .setLinearHeadingInterpolation(Math.toRadians(0), Math.toRadians(0))
                 .build();
     }
 
@@ -266,7 +236,7 @@ public class Decode_Auto1_Blue_PGP extends OpMode {
 
             case 2:
                 canopyServo.setPower(-40);
-
+                launcherMotor.setPower(-0.7);
                 try {
                     sleep(1500);
                 } catch (InterruptedException e) {
@@ -285,7 +255,7 @@ public class Decode_Auto1_Blue_PGP extends OpMode {
                 launcherMotor.setPower(-0.75);
 
                 try {
-                    sleep(2000);
+                    sleep(1000);
                 } catch (InterruptedException e) {
                     throw new RuntimeException(e);
                 }
@@ -296,7 +266,7 @@ public class Decode_Auto1_Blue_PGP extends OpMode {
                     throw new RuntimeException(e);
                 }
                 rliftServo.setPosition(0.05);
-                launcherMotor.setPower(-0.7);
+                launcherMotor.setPower(-0.75);
 
                 try {
                     sleep(1000);
@@ -312,12 +282,6 @@ public class Decode_Auto1_Blue_PGP extends OpMode {
                 }
                 lliftServo.setPosition(0.2) ;
 
-
-                try {
-                    sleep(1000);
-                } catch (InterruptedException e) {
-                    throw new RuntimeException(e);
-                }
                 /* Score Preload End*/
                 setPathState(17);
 
@@ -461,6 +425,7 @@ public class Decode_Auto1_Blue_PGP extends OpMode {
                 }
                 break;
             case 16:
+                launcherMotor.setPower(-0.7);
                 try {
                     sleep(1000);
                 } catch (InterruptedException e) {
@@ -476,10 +441,10 @@ public class Decode_Auto1_Blue_PGP extends OpMode {
                 }
                 lliftServo.setPosition(0.2) ;
 
-                launcherMotor.setPower(-0.7);
+                launcherMotor.setPower(-0.75);
 
                 try {
-                    sleep(2000);
+                    sleep(1000);
                 } catch (InterruptedException e) {
                     throw new RuntimeException(e);
                 }
@@ -490,7 +455,7 @@ public class Decode_Auto1_Blue_PGP extends OpMode {
                     throw new RuntimeException(e);
                 }
                 rliftServo.setPosition(0.05);
-                launcherMotor.setPower(-0.7);
+                launcherMotor.setPower(-0.75);
 
                 try {
                     sleep(1000);
@@ -506,11 +471,7 @@ public class Decode_Auto1_Blue_PGP extends OpMode {
                 }
                 lliftServo.setPosition(0.2) ;
 
-                try {
-                    sleep(1000);
-                } catch (InterruptedException e) {
-                    throw new RuntimeException(e);
-                }                    /* Score First Set End*/
+                /* Score First Set End*/
 
                 setPathState(99);
 //                }
@@ -637,7 +598,7 @@ public class Decode_Auto1_Blue_PGP extends OpMode {
                 launcherMotor.setPower(-0.75);
 
                 try {
-                    sleep(3000);
+                    sleep(1000);
                 } catch (InterruptedException e) {
                     throw new RuntimeException(e);
                 }
@@ -648,7 +609,7 @@ public class Decode_Auto1_Blue_PGP extends OpMode {
                     throw new RuntimeException(e);
                 }
                 rliftServo.setPosition(0.05);
-                launcherMotor.setPower(-0.7);
+                launcherMotor.setPower(-0.75);
 
                 try {
                     sleep(1000);
@@ -715,6 +676,7 @@ public class Decode_Auto1_Blue_PGP extends OpMode {
 //                if (!follower.isBusy()) {
                 /* Since this is a pathChain, we can have Pedro hold the end point while we are grabbing the sample */
                 follower.followPath(scorePickup3, true);
+                launcherMotor.setPower(-0.7);
                 try {
                     sleep(1000);
                 } catch (InterruptedException e) {
@@ -722,6 +684,22 @@ public class Decode_Auto1_Blue_PGP extends OpMode {
                 }
 
                 /* Score Preload */
+                lliftServo.setPosition(0.01);
+                try {
+                    sleep(1000);
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
+                lliftServo.setPosition(0.2) ;
+
+                launcherMotor.setPower(-0.75);
+
+                try {
+                    sleep(1000);
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
+
                 rliftServo.setPosition(0.24);
                 try {
                     sleep(1000);
@@ -729,15 +707,13 @@ public class Decode_Auto1_Blue_PGP extends OpMode {
                     throw new RuntimeException(e);
                 }
                 rliftServo.setPosition(0.05);
-                launcherMotor.setPower(-0.7);
+                launcherMotor.setPower(-0.75);
 
                 try {
                     sleep(1000);
                 } catch (InterruptedException e) {
                     throw new RuntimeException(e);
                 }
-
-
                 lliftServo.setPosition(0.01);
                 try {
                     sleep(1000);
@@ -746,28 +722,6 @@ public class Decode_Auto1_Blue_PGP extends OpMode {
                 }
                 lliftServo.setPosition(0.2) ;
 
-                launcherMotor.setPower(-0.7);
-
-                try {
-                    sleep(2000);
-                } catch (InterruptedException e) {
-                    throw new RuntimeException(e);
-                }
-
-                lliftServo.setPosition(0.01);
-                try {
-                    sleep(1000);
-                } catch (InterruptedException e) {
-                    throw new RuntimeException(e);
-                }
-                lliftServo.setPosition(0.2) ;
-
-
-                try {
-                    sleep(1000);
-                } catch (InterruptedException e) {
-                    throw new RuntimeException(e);
-                }
                 canopyServo.setPower(0);
                 launcherMotor.setPower(0);
                 /* Score Third Set End*/
@@ -830,22 +784,6 @@ public class Decode_Auto1_Blue_PGP extends OpMode {
         telemetry.addData("heading", follower.getPose().getHeading());
         telemetry.update();
 
-        //NormalizedRGBA colors = colorSensor.getNormalizedColors();
-        //NormalizedColorSensor.NormalizedRGBA colors = colorSensor.getNormalizedColors();
-//        float[] hsvValues = new float[3];
-//        Color.colorToHSV(colors.toColor(), hsvValues);
-
-        // Sorter Code
-
-//        if (hsvValues[0] >= GREEN_HUE_MIN && hsvValues[0] <= GREEN_HUE_MAX)
-//        {
-//            sorterServo.setPosition(0.6);
-//        }
-//        else
-//        {
-//            sorterServo.setPosition(0.1);
-//        }
-
     }
 
     /** This method is called once at the init of the OpMode. **/
@@ -864,23 +802,7 @@ public class Decode_Auto1_Blue_PGP extends OpMode {
         launcherMotor = hardwareMap.dcMotor.get("launcher");
         intakeMotor = hardwareMap.dcMotor.get("grabber");
 
-
-
-
-        //colorSensor = hardwareMap.get(NormalizedColorSensor.class, "sensor_color");
-
-        //   cd.init(hardwareMap);
-
-/******** Setting ZeroPowerBehaviour *******/
-//        DcMotorEx fL = hardwareMap.dcMotor.get("front_left_drive");
-//        DcMotorEx fR = hardwareMap.dcMotor.get("front_right_drive");
-//        DcMotorEx bL = hardwareMap.dcMotor.get("back_left_drive");
-//        DcMotorEx bR = hardwareMap.dcMotor.get("back_right_drive");
-//        allDriveMotors = Arrays.asList(fL, fR, bL, bR); // Example motor list
-//        configureMotors(); // Apply zero power behavior to all motors
-
-
-        follower = Constants.createFollower(hardwareMap);
+       follower = Constants.createFollower(hardwareMap);
         buildPaths();
         follower.setStartingPose(startPose);
 

@@ -9,7 +9,7 @@ import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.hardware.rev.RevBlinkinLedDriver;
 
-@TeleOp(name="FirstTeleOp", group="Linear OpMode")
+@TeleOp(name="Main_Teleop_Orig", group="Linear OpMode")
 //@Disabled
 public class MainTeleop_original extends LinearOpMode {
 
@@ -179,42 +179,42 @@ GamePad 1
             if (gamepad2.dpad_up)
             {
                 launcher.setPower(0.7);
-                Light.setPattern(RevBlinkinLedDriver.BlinkinPattern.RED);
+              //  Light.setPattern(RevBlinkinLedDriver.BlinkinPattern.RED);
                 sleep(400);
-                Light.setPattern(RevBlinkinLedDriver.BlinkinPattern.YELLOW);
+                //Light.setPattern(RevBlinkinLedDriver.BlinkinPattern.YELLOW);
                 sleep(400);
-                Light.setPattern(RevBlinkinLedDriver.BlinkinPattern.GREEN);
+             //   Light.setPattern(RevBlinkinLedDriver.BlinkinPattern.GREEN);
 
             }
 
             if (gamepad2.dpad_down)
             {
                 launcher.setPower(0.5);
-                Light.setPattern(RevBlinkinLedDriver.BlinkinPattern.RED);
+              //  Light.setPattern(RevBlinkinLedDriver.BlinkinPattern.RED);
                 sleep(400);
-                Light.setPattern(RevBlinkinLedDriver.BlinkinPattern.YELLOW);
+             //   Light.setPattern(RevBlinkinLedDriver.BlinkinPattern.YELLOW);
                 sleep(400);
-                Light.setPattern(RevBlinkinLedDriver.BlinkinPattern.GREEN);
+             //   Light.setPattern(RevBlinkinLedDriver.BlinkinPattern.GREEN);
             }
 
             if (gamepad2.dpad_left)
             {
                 launcher.setPower(0.6);
-                Light.setPattern(RevBlinkinLedDriver.BlinkinPattern.RED);
+                //Light.setPattern(RevBlinkinLedDriver.BlinkinPattern.RED);
                 sleep(400);
-                Light.setPattern(RevBlinkinLedDriver.BlinkinPattern.YELLOW);
+               // Light.setPattern(RevBlinkinLedDriver.BlinkinPattern.YELLOW);
                 sleep(400);
-                Light.setPattern(RevBlinkinLedDriver.BlinkinPattern.GREEN);
+             //   Light.setPattern(RevBlinkinLedDriver.BlinkinPattern.GREEN);
             }
 
             if (gamepad2.dpad_right)
             {
                 launcher.setPower(0.8);
-                Light.setPattern(RevBlinkinLedDriver.BlinkinPattern.RED);
+                //Light.setPattern(RevBlinkinLedDriver.BlinkinPattern.RED);
                 sleep(400);
-                Light.setPattern(RevBlinkinLedDriver.BlinkinPattern.YELLOW);
+                //Light.setPattern(RevBlinkinLedDriver.BlinkinPattern.YELLOW);
                 sleep(400);
-                Light.setPattern(RevBlinkinLedDriver.BlinkinPattern.GREEN);
+               // Light.setPattern(RevBlinkinLedDriver.BlinkinPattern.GREEN);
             }
 
             if (gamepad1.dpad_right)
@@ -229,17 +229,17 @@ GamePad 1
 
             if (gamepad2.right_bumper)
             {
-                Rlift.setPosition(1.5);
+                Rlift.setPosition(.5);
                 sleep(1000);
-                Rlift.setPosition(0.92);
-                Light.setPattern(RevBlinkinLedDriver.BlinkinPattern.RED);
+                Rlift.setPosition(0);
+               // Light.setPattern(RevBlinkinLedDriver.BlinkinPattern.RED);
             }
             if (gamepad2.left_bumper)
             {
                 Llift.setPosition(0.01);
                 sleep(1000);
                 Llift.setPosition(0.2) ;
-                Light.setPattern(RevBlinkinLedDriver.BlinkinPattern.RED);
+               // Light.setPattern(RevBlinkinLedDriver.BlinkinPattern.RED);
             }
 
             if (gamepad1.a)

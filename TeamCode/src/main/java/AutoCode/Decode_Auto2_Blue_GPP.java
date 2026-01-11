@@ -42,21 +42,23 @@ public class Decode_Auto2_Blue_GPP extends OpMode {
     private final Pose startPose = new Pose(56, 8, Math.toRadians(90)); // Start Pose of our robot.
 
     private final Pose scorePose = new Pose(56, 14, Math.toRadians(106.5)); // Scoring Pose of our robot. It is facing the goal at a 135 degree angle.
-    private final Pose scorePose1 = new Pose(56, 14, Math.toRadians(116.5)); // Scoring Pose of our robot. It is facing the goal at a 135 degree angle.
+    private final Pose scorePose1 = new Pose(56, 14, Math.toRadians(101.5)); // Scoring Pose of our robot. It is facing the goal at a 135 degree angle.
 
-    private final Pose pickup1Pose = new Pose(44, 36, Math.toRadians(180)); // Highest (First Set) of Artifacts from the Spike Mark.
-    private final Pose Collect1_1 = new Pose(39, 36, Math.toRadians(180));
-    private final Pose Collect1_2 = new Pose(24, 36, Math.toRadians(180));
+    //private final Pose scorePose2 = new Pose(56, 14, Math.toRadians(1)); // Scoring Pose of our robot. It is facing the goal at a 135 degree angle.
 
-    private final Pose pickup2Pose = new Pose(44, 56, Math.toRadians(180)); // Middle (Second Set) of Artifacts from the Spike Mark.
+    private final Pose pickup1Pose = new Pose(43, 26, Math.toRadians(170)); // Highest (First Set) of Artifacts from the Spike Mark.
+    private final Pose Collect1_1 = new Pose(39, 26, Math.toRadians(170));
+    private final Pose Collect1_2 = new Pose(24, 26, Math.toRadians(170));
+
+    private final Pose pickup2Pose = new Pose(43, 56, Math.toRadians(180)); // Middle (Second Set) of Artifacts from the Spike Mark.
     private final Pose Collect2_1 = new Pose(39, 56, Math.toRadians(180));
     private final Pose Collect2_2 = new Pose(34, 56, Math.toRadians(180));
     private final Pose Collect2_3 = new Pose(24, 56, Math.toRadians(180));
 
-    private final Pose pickup3Pose = new Pose(44, 84, Math.toRadians(180)); // Lowest (Third Set) of Artifacts from the Spike Mark.
-    private final Pose Collect3_1 = new Pose(34, 84, Math.toRadians(180));
-    private final Pose Collect3_2 = new Pose(24, 84, Math.toRadians(180));
-    private final Pose LeavePose = new Pose(44, 36, Math.toRadians(180)); // Leave Pose at the end of Auto.
+    private final Pose pickup3Pose = new Pose(43, 80, Math.toRadians(170)); // Lowest (Third Set) of Artifacts from the Spike Mark.
+    private final Pose Collect3_1 = new Pose(34, 80, Math.toRadians(170));
+    private final Pose Collect3_2 = new Pose(24, 80, Math.toRadians(170));
+    private final Pose LeavePose = new Pose(43, 26, Math.toRadians(170)); // Leave Pose at the end of Auto.
 
     //    private Path scanTag;
     private Path scorePreload;
@@ -216,7 +218,7 @@ public class Decode_Auto2_Blue_GPP extends OpMode {
         switch (pathState) {
 
             case 0:
-                launcherMotor.setPower(-0.80);
+                launcherMotor.setPower(-1);
                 intakeMotor.setPower(1);
                 follower.followPath(scorePreload);
                 setPathState(1);
@@ -236,8 +238,8 @@ public class Decode_Auto2_Blue_GPP extends OpMode {
                 break;
 
             case 2:
-                canopyServo.setPower(-40);
-                launcherMotor.setPower(-0.80);
+                canopyServo.setPower(-0.20);
+                launcherMotor.setPower(-0.95);
                 try {
                     sleep(1500);
                 } catch (InterruptedException e) {
@@ -252,7 +254,7 @@ public class Decode_Auto2_Blue_GPP extends OpMode {
                     throw new RuntimeException(e);
                 }
                 rliftServo.setPosition(0.05);
-                launcherMotor.setPower(-0.85);
+                launcherMotor.setPower(-0.90);
 
                 try {
                     sleep(1000);
@@ -268,7 +270,7 @@ public class Decode_Auto2_Blue_GPP extends OpMode {
                 }
                 lliftServo.setPosition(0.2) ;
 
-                launcherMotor.setPower(-0.85);
+                launcherMotor.setPower(-0.90);
 
                 try {
                     sleep(2000);
@@ -427,9 +429,9 @@ public class Decode_Auto2_Blue_GPP extends OpMode {
                 }
                 break;
             case 16:
-                launcherMotor.setPower(-0.80);
+                launcherMotor.setPower(-0.90);
                 try {
-                    sleep(1000);
+                    sleep(1500);
                 } catch (InterruptedException e) {
                     throw new RuntimeException(e);
                 }
@@ -442,7 +444,7 @@ public class Decode_Auto2_Blue_GPP extends OpMode {
                     throw new RuntimeException(e);
                 }
                 rliftServo.setPosition(0.05);
-                launcherMotor.setPower(-0.85);
+                launcherMotor.setPower(-0.90);
 
                 try {
                     sleep(1000);
@@ -459,7 +461,7 @@ public class Decode_Auto2_Blue_GPP extends OpMode {
                 }
                 lliftServo.setPosition(0.2) ;
 
-                launcherMotor.setPower(-0.85);
+                launcherMotor.setPower(-0.90);
 
                 try {
                     sleep(2000);
@@ -501,7 +503,7 @@ public class Decode_Auto2_Blue_GPP extends OpMode {
             case 19:
                 /* This case checks the robot's position and will wait until the robot position is close (1 inch away) from the pickup2Pose's position */
 
-                canopyServo.setPower(-40);
+                canopyServo.setPower(-0.20);
                 sorterServo.setPosition(0.15);
                 /* Since this is a pathChain, we can have Pedro hold the end point while we are scoring the sample */
                 setPathState(20);
@@ -582,11 +584,11 @@ public class Decode_Auto2_Blue_GPP extends OpMode {
                 }
                 break;
             case 28:
-                launcherMotor.setPower(-0.80);
-                canopyServo.setPower(-40);
+                launcherMotor.setPower(-0.95);
+                canopyServo.setPower(-0.20);
 
                 try {
-                    sleep(1000);
+                    sleep(1500);
                 } catch (InterruptedException e) {
                     throw new RuntimeException(e);
                 }
@@ -598,7 +600,7 @@ public class Decode_Auto2_Blue_GPP extends OpMode {
                     throw new RuntimeException(e);
                 }
                 rliftServo.setPosition(0.05);
-                launcherMotor.setPower(-0.85);
+                launcherMotor.setPower(-0.90);
 
                 try {
                     sleep(1000);
@@ -614,10 +616,10 @@ public class Decode_Auto2_Blue_GPP extends OpMode {
                 }
                 lliftServo.setPosition(0.2) ;
 
-                launcherMotor.setPower(-0.85);
+                launcherMotor.setPower(-0.90);
 
                 try {
-                    sleep(3000);
+                    sleep(2000);
                 } catch (InterruptedException e) {
                     throw new RuntimeException(e);
                 }
@@ -646,7 +648,7 @@ public class Decode_Auto2_Blue_GPP extends OpMode {
                 } catch (InterruptedException e) {
                     throw new RuntimeException(e);
                 }
-                setPathState(99);
+                setPathState(30);
 //                }
                 break;
             case 30:
@@ -654,7 +656,7 @@ public class Decode_Auto2_Blue_GPP extends OpMode {
 //                if (!follower.isBusy()) {
                 //intakeServo.setPower(100);
                 intakeMotor.setPower(1);
-                canopyServo.setPower(-40);
+                canopyServo.setPower(-0.20);
                 sorterServo.setPosition(0.15);
                 /* Since this is a pathChain, we can have Pedro hold the end point while we are scoring the sample */
                 follower.followPath(CollectSet3_1, true);
@@ -682,9 +684,9 @@ public class Decode_Auto2_Blue_GPP extends OpMode {
 //                if (!follower.isBusy()) {
                 /* Since this is a pathChain, we can have Pedro hold the end point while we are grabbing the sample */
                 follower.followPath(scorePickup3, true);
-                launcherMotor.setPower(-0.80);
+                launcherMotor.setPower(-0.90);
                 try {
-                    sleep(1000);
+                    sleep(1500);
                 } catch (InterruptedException e) {
                     throw new RuntimeException(e);
                 }
@@ -697,7 +699,7 @@ public class Decode_Auto2_Blue_GPP extends OpMode {
                     throw new RuntimeException(e);
                 }
                 rliftServo.setPosition(0.05);
-                launcherMotor.setPower(-0.85);
+                launcherMotor.setPower(-0.90);
 
                 try {
                     sleep(1000);
@@ -714,7 +716,7 @@ public class Decode_Auto2_Blue_GPP extends OpMode {
                 }
                 lliftServo.setPosition(0.2) ;
 
-                launcherMotor.setPower(-0.85);
+                launcherMotor.setPower(-0.90);
 
                 try {
                     sleep(2000);

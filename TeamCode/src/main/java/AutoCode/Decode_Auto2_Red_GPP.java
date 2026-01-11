@@ -44,23 +44,23 @@ public class Decode_Auto2_Red_GPP extends OpMode {
     private final Pose startPose = new Pose(88, 8, Math.toRadians(90)); // Start Pose of our robot.
 //    private final Pose scanPose = new Pose(72, 128, Math.toRadians(90)); // Scan Pose of our robot for april Tag. It is facing the AprilTag at a 90 degree angle.
 
-    private final Pose scorePose = new Pose(88, 14, Math.toRadians(73.5)); // Scoring Pose of our robot. It is facing the goal at a 135 degree angle.
-    private final Pose scorePose1 = new Pose(88, 14, Math.toRadians(63.5)); // Scoring Pose of our robot. It is facing the goal at a 135 degree angle.
+    private final Pose scorePose = new Pose(88, 14, Math.toRadians(71)); // Scoring Pose of our robot. It is facing the goal at a 135 degree angle.
+    private final Pose scorePose1 = new Pose(88, 14, Math.toRadians(67)); // Scoring Pose of our robot. It is facing the goal at a 135 degree angle.
 
-    //    private final Pose scorePose = new Pose(60, 84, Math.toRadians(135)); // Scoring Pose of our robot. It is facing the goal at a 135 degree angle.
-    private final Pose pickup1Pose = new Pose(106, 36, Math.toRadians(10)); // Highest (First Set) of Artifacts from the Spike Mark.
-    private final Pose Collect1_1 = new Pose(114, 36, Math.toRadians(10));
-    private final Pose Collect1_2 = new Pose(126, 36, Math.toRadians(10));
+        private final Pose scorePose2 = new Pose(88, 14, Math.toRadians(78)); // Scoring Pose of our robot. It is facing the goal at a 135 degree angle.
+    private final Pose pickup1Pose = new Pose(106, 30, Math.toRadians(10)); // Highest (First Set) of Artifacts from the Spike Mark.
+    private final Pose Collect1_1 = new Pose(114, 30, Math.toRadians(10));
+    private final Pose Collect1_2 = new Pose(126, 30, Math.toRadians(10));
 //    private final Pose Collect1_3 = new Pose(114, 74, Math.toRadians(90));
 //    private final Pose Collect1_4 = new Pose(120, 74, Math.toRadians(90));
-    private final Pose pickup2Pose = new Pose(106, 60, Math.toRadians(10)); // Middle (Second Set) of Artifacts from the Spike Mark.
-    private final Pose Collect2_1 = new Pose(114, 60, Math.toRadians(10));
-    private final Pose Collect2_2 = new Pose(119, 60, Math.toRadians(10));
-    private final Pose Collect2_3 = new Pose(126, 60, Math.toRadians(10));
+    private final Pose pickup2Pose = new Pose(100, 56, Math.toRadians(10)); // Middle (Second Set) of Artifacts from the Spike Mark.
+    private final Pose Collect2_1 = new Pose(104, 56, Math.toRadians(0));
+    private final Pose Collect2_2 = new Pose(110, 56, Math.toRadians(0));
+    private final Pose Collect2_3 = new Pose(126, 56, Math.toRadians(0));
     private final Pose pickup3Pose = new Pose(106, 84, Math.toRadians(10)); // Lowest (Third Set) of Artifacts from the Spike Mark.
     private final Pose Collect3_1 = new Pose(119, 84, Math.toRadians(10));
     private final Pose Collect3_2 = new Pose(126, 84, Math.toRadians(10));
-    private final Pose LeavePose = new Pose(106, 36, Math.toRadians(10)); // Leave Pose at the end of Auto.
+    private final Pose LeavePose = new Pose(104, 30, Math.toRadians(10)); // Leave Pose at the end of Auto.
 
     //    private Path scanTag;
     private Path scorePreload;
@@ -177,13 +177,13 @@ private PathChain scorePreload1, grabPickup1, grabPickup1_1, CollectSet1_1, Coll
                 .build();
         /* This is our scorePickup2 PathChain. We are using a single path with a BezierLine, which is a straight line. */
         scorePickup2 = follower.pathBuilder()
-                .addPath(new BezierLine(Collect2_3, scorePose1))
-                .setLinearHeadingInterpolation(Collect2_3.getHeading(), scorePose1.getHeading())
+                .addPath(new BezierLine(Collect2_3, scorePose))
+                .setLinearHeadingInterpolation(Collect2_3.getHeading(), scorePose.getHeading())
                 .build();
 
         scorePickup2_1 = follower.pathBuilder()
-                .addPath(new BezierLine(scorePose1, scorePose1))
-                .setLinearHeadingInterpolation(scorePose1.getHeading(), scorePose1.getHeading())
+                .addPath(new BezierLine(scorePose, scorePose2))
+                .setLinearHeadingInterpolation(scorePose.getHeading(), scorePose2.getHeading())
                 .build();
 
         /* This is our grabPickup3 PathChain. We are using a single path with a BezierLine, which is a straight line. */
@@ -219,7 +219,7 @@ private PathChain scorePreload1, grabPickup1, grabPickup1_1, CollectSet1_1, Coll
         switch (pathState) {
 
             case 0:
-                launcherMotor.setPower(-0.80);
+                launcherMotor.setPower(-1);
                 intakeMotor.setPower(1);
                 follower.followPath(scorePreload);
                 setPathState(1);
@@ -239,10 +239,10 @@ private PathChain scorePreload1, grabPickup1, grabPickup1_1, CollectSet1_1, Coll
                 break;
 
             case 2:
-                canopyServo.setPower(-40);
-                launcherMotor.setPower(-0.80);
+                canopyServo.setPower(-0.20);
+                launcherMotor.setPower(-0.95);
                 try {
-                    sleep(1500);
+                    sleep(1000);
                 } catch (InterruptedException e) {
                     throw new RuntimeException(e);
                 }
@@ -255,7 +255,7 @@ private PathChain scorePreload1, grabPickup1, grabPickup1_1, CollectSet1_1, Coll
                     throw new RuntimeException(e);
                 }
                 rliftServo.setPosition(0.05);
-                launcherMotor.setPower(-0.85);
+                launcherMotor.setPower(-0.90);
 
                 try {
                     sleep(1000);
@@ -272,7 +272,7 @@ private PathChain scorePreload1, grabPickup1, grabPickup1_1, CollectSet1_1, Coll
                 }
                 lliftServo.setPosition(0.2) ;
 
-                launcherMotor.setPower(-0.85);
+                launcherMotor.setPower(-0.90);
 
                 try {
                     sleep(2000);
@@ -289,7 +289,7 @@ private PathChain scorePreload1, grabPickup1, grabPickup1_1, CollectSet1_1, Coll
                 lliftServo.setPosition(0.2) ;
 
                 /* Score Preload End*/
-                setPathState(3);
+                setPathState(17);
 
                 break;
 
@@ -450,7 +450,7 @@ private PathChain scorePreload1, grabPickup1, grabPickup1_1, CollectSet1_1, Coll
                     throw new RuntimeException(e);
                 }
                 rliftServo.setPosition(0.05);
-                launcherMotor.setPower(-0.85);
+                launcherMotor.setPower(-0.90);
 
                 try {
                     sleep(1000);
@@ -467,7 +467,7 @@ private PathChain scorePreload1, grabPickup1, grabPickup1_1, CollectSet1_1, Coll
                 }
                 lliftServo.setPosition(0.2) ;
 
-                launcherMotor.setPower(-0.85);
+                launcherMotor.setPower(-0.90);
 
                 try {
                     sleep(2000);
@@ -509,7 +509,7 @@ private PathChain scorePreload1, grabPickup1, grabPickup1_1, CollectSet1_1, Coll
             case 19:
                 /* This case checks the robot's position and will wait until the robot position is close (1 inch away) from the pickup2Pose's position */
 
-                canopyServo.setPower(-40);
+                canopyServo.setPower(-0.20);
                 sorterServo.setPosition(0.15);
                 /* Since this is a pathChain, we can have Pedro hold the end point while we are scoring the sample */
                 setPathState(20);
@@ -541,6 +541,11 @@ private PathChain scorePreload1, grabPickup1, grabPickup1_1, CollectSet1_1, Coll
             case 23:
 
                 if (!follower.isBusy()) {
+                    try {
+                        sleep(1000);
+                    } catch (InterruptedException e) {
+                        throw new RuntimeException(e);
+                    }
                     follower.followPath(CollectSet2_2_1, true);
 
 
@@ -560,6 +565,11 @@ private PathChain scorePreload1, grabPickup1, grabPickup1_1, CollectSet1_1, Coll
                 break;
             case 25:
                 if (!follower.isBusy()) {
+                    try {
+                        sleep(1000);
+                    } catch (InterruptedException e) {
+                        throw new RuntimeException(e);
+                    }
                     follower.followPath(CollectSet2_3_1, true);
 
                     try {
@@ -590,8 +600,8 @@ private PathChain scorePreload1, grabPickup1, grabPickup1_1, CollectSet1_1, Coll
                 }
                 break;
             case 28:
-                launcherMotor.setPower(-0.80);
-                canopyServo.setPower(-40);
+                launcherMotor.setPower(-0.95);
+                canopyServo.setPower(-0.20);
 
                 try {
                     sleep(1000);
@@ -606,7 +616,7 @@ private PathChain scorePreload1, grabPickup1, grabPickup1_1, CollectSet1_1, Coll
                     throw new RuntimeException(e);
                 }
                 rliftServo.setPosition(0.05);
-                launcherMotor.setPower(-0.85);
+                launcherMotor.setPower(-0.90);
 
                 try {
                     sleep(1000);
@@ -622,7 +632,7 @@ private PathChain scorePreload1, grabPickup1, grabPickup1_1, CollectSet1_1, Coll
                 }
                 lliftServo.setPosition(0.2) ;
 
-                launcherMotor.setPower(-0.85);
+                launcherMotor.setPower(-0.90);
 
                 try {
                     sleep(2000);
@@ -654,7 +664,7 @@ private PathChain scorePreload1, grabPickup1, grabPickup1_1, CollectSet1_1, Coll
                 } catch (InterruptedException e) {
                     throw new RuntimeException(e);
                 }
-                setPathState(99);
+                setPathState(30);
 //                }
                 break;
             case 30:
@@ -662,7 +672,7 @@ private PathChain scorePreload1, grabPickup1, grabPickup1_1, CollectSet1_1, Coll
 //                if (!follower.isBusy()) {
                 //intakeServo.setPower(100);
                 intakeMotor.setPower(1);
-                canopyServo.setPower(-40);
+                canopyServo.setPower(-0.20);
                 sorterServo.setPosition(0.15);
                 /* Since this is a pathChain, we can have Pedro hold the end point while we are scoring the sample */
                 follower.followPath(CollectSet3_1, true);
@@ -705,7 +715,7 @@ private PathChain scorePreload1, grabPickup1, grabPickup1_1, CollectSet1_1, Coll
                     throw new RuntimeException(e);
                 }
                 rliftServo.setPosition(0.05);
-                launcherMotor.setPower(-0.85);
+                launcherMotor.setPower(-0.90);
 
                 try {
                     sleep(1000);
@@ -722,7 +732,7 @@ private PathChain scorePreload1, grabPickup1, grabPickup1_1, CollectSet1_1, Coll
                 }
                 lliftServo.setPosition(0.2) ;
 
-                launcherMotor.setPower(-0.85);
+                launcherMotor.setPower(-0.90);
 
                 try {
                     sleep(2000);

@@ -1,19 +1,19 @@
 package TeleOpCode;
 
 
+import android.graphics.Color;
+
+import com.qualcomm.hardware.rev.RevBlinkinLedDriver;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
-import com.qualcomm.robotcore.hardware.Servo;
-import com.qualcomm.robotcore.util.ElapsedTime;
-import com.qualcomm.hardware.rev.RevBlinkinLedDriver;
-//Color sensor libraries
-
 import com.qualcomm.robotcore.hardware.NormalizedColorSensor;
 import com.qualcomm.robotcore.hardware.NormalizedRGBA;
-import android.graphics.Color;
+import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.util.ElapsedTime;
 
 @TeleOp(name="MainTeleOp", group="Linear OpMode")
 //@Disabled
@@ -21,11 +21,13 @@ public class MainTeleop extends LinearOpMode {
 
     private ElapsedTime runtime = new ElapsedTime();
     private NormalizedColorSensor colorSensor = null;
-
+    private double launcherspeed;
+    private final double POWER_INCREMENT = 0.05; // Increase by 5% each press
+    private final double MAX_POWER = 1.0; // 100% power
+    private final double MIN_POWER = -1.0; // Reverse full power
 //    private final float GREEN_HUE_MIN = 80;
 //    private final float GREEN_HUE_MAX = 145;
 //    private ElapsedTime pidTimer = new ElapsedTime();
-
 
 //    ColorDetection cd = new ColorDetection();
 //    ColorDetection.DetectedColor detectedColor;
@@ -50,9 +52,11 @@ public class MainTeleop extends LinearOpMode {
         bL.setDirection(DcMotorSimple.Direction.REVERSE);
         bR.setDirection(DcMotorSimple.Direction.FORWARD);
         fL.setDirection(DcMotorSimple.Direction.FORWARD);
-        fR.setDirection(DcMotorSimple.Direction.FORWARD);
-        launcher.setDirection(DcMotorSimple.Direction.REVERSE);
+        fR.setDirection(DcMotorSimple.Direction.REVERSE);
+//        launcher.setDirection(DcMotorSimple.Direction.REVERSE);
+        launcher.setDirection(DcMotorEx.Direction.REVERSE);
         launcher.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+//        launcher.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         fL.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         fR.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         bL.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
@@ -79,6 +83,10 @@ public class MainTeleop extends LinearOpMode {
 
         waitForStart();
 
+        // Variables to track button press state (to avoid rapid repeats)
+        boolean lastAState = false;
+        boolean lastBState = false;
+
         while (opModeIsActive())
         {
             final double TICKS_PER_REV = 28.0;   // your encoder resolution
@@ -96,7 +104,7 @@ public class MainTeleop extends LinearOpMode {
             int dPos = curPos - lastPos;
 
             double ticksPerSec = dPos / dt;
-            double ticksPerRev = 537.6;  // change this to the correct value
+            double ticksPerRev = 28.0;  // change this to the correct value
             double rpm = Math.abs((ticksPerSec / ticksPerRev) * 60.0);
 
 // Correct RPM formula
@@ -172,32 +180,60 @@ Color sensor code to get the values
 // canopy code
             if (gamepad2.triangle)   // canopy Wheel Inward
             {
-                if (TriCanopy)
-                {
-                    Canopy.setPower(0);   // Turn off canopy
-                    TriCanopy = false;
-                }
-                else
-                {
-                    Canopy.setPower(40);;  // Turn on canopy
-                    TriCanopy = true;
-                }
+//                if (TriCanopy)
+//                {
+//                    Canopy.setPower(0);   // Turn off canopy
+//                    TriCanopy = false;
+//                }
+//                else
+//                {
+//                    Canopy.setPower(40);;  // Turn on canopy
+//                    TriCanopy = true;
+//                }
+
+                Canopy.setPower(0);   // Turn off canopy
 
             }
 
             if (gamepad2.cross)   // canopy wheel reverse
             {
-                if (CrossCanopy)
-                {
-                    Canopy.setPower(0);   // Turn off canopy
-                    CrossCanopy = false;
-                }
-                else
-                {
-                    Canopy.setPower(-40);  // Turn on canopy
-                    CrossCanopy = true;
-                }
+//                if (CrossCanopy)
+//                {
+//                    Canopy.setPower(0);   // Turn off canopy
+//                    CrossCanopy = false;
+//                }
+//                else
+//                {
+//                    Canopy.setPower(-40);  // Turn on canopy
+//                    CrossCanopy = true;
+//                }
+                Canopy.setPower(-40);  // Turn on canopy
             }
+// Launcher speed increase
+            if (gamepad2.circle && !lastAState)   // Launcher speed increment
+            {
+                 launcherspeed = launcher.getPower() + POWER_INCREMENT;
+                if (launcherspeed > MAX_POWER)  launcherspeed = MAX_POWER;
+                // Apply power to motor
+                launcher.setPower(launcherspeed);
+                sleep(100);
+            }
+            if (gamepad2.square && !lastBState)   // Launcher speed decrease
+            {
+                launcherspeed = launcher.getPower() - POWER_INCREMENT;
+                if (launcherspeed < MIN_POWER) launcherspeed = MIN_POWER;
+                launcher.setPower(launcherspeed);
+                sleep(100);
+            }
+
+            // Update telemetry
+            telemetry.addData("Motor Power", "%.2f", launcherspeed);
+            telemetry.update();
+
+            // Save button states for next loop
+            lastAState = gamepad1.circle;
+            lastBState = gamepad1.square;
+
             // Sorter Code
 
 /*
@@ -206,7 +242,7 @@ Color sensor code to get the values
                 Sorter.setPosition(0.6);
             }
             else
-            {
+            {launcher
                 Sorter.setPosition(0.1);
             }
 */
@@ -235,7 +271,7 @@ Color sensor code to get the values
 
             if (gamepad2.dpad_up)
             {
-                launcher.setPower(0.7);
+                launcher.setPower(0.75);
 //                Light.setPattern(RevBlinkinLedDriver.BlinkinPattern.RED);
 //                sleep(400);
 //                Light.setPattern(RevBlinkinLedDriver.BlinkinPattern.YELLOW);
@@ -246,7 +282,7 @@ Color sensor code to get the values
 
             if (gamepad2.dpad_down)
             {
-                launcher.setPower(0.5);
+                launcher.setPower(0.55);
 //                Light.setPattern(RevBlinkinLedDriver.BlinkinPattern.RED);
 //                sleep(400);
 //                Light.setPattern(RevBlinkinLedDriver.BlinkinPattern.YELLOW);
@@ -266,7 +302,7 @@ Color sensor code to get the values
 
             if (gamepad2.dpad_right)
             {
-                launcher.setPower(0.8);
+                launcher.setPower(0.85);
 //                Light.setPattern(RevBlinkinLedDriver.BlinkinPattern.RED);
 //                sleep(400);
 //                Light.setPattern(RevBlinkinLedDriver.BlinkinPattern.YELLOW);

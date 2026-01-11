@@ -45,23 +45,22 @@ public class Decode_Auto1_Red_PGP extends OpMode {
     private final Pose startPose = new Pose(115.5, 128, Math.toRadians(55)); // Start Pose of our robot.
     private final Pose scanPose = new Pose(72, 128, Math.toRadians(90)); // Scan Pose of our robot for april Tag. It is facing the AprilTag at a 90 degree angle.
 
-    private final Pose scorePose = new Pose(84, 84, Math.toRadians(50)); // Scoring Pose of our robot. It is facing the goal at a 135 degree angle.
-    private final Pose scorePose1 = new Pose(84, 84, Math.toRadians(50)); // Scoring Pose of our robot. It is facing the goal at a 135 degree angle.
+    private final Pose scorePose = new Pose(83, 80, Math.toRadians(50)); // Scoring Pose of our robot. It is facing the goal at a 135 degree angle.
+    private final Pose scorePose1 = new Pose(83, 80, Math.toRadians(50)); // Scoring Pose of our robot. It is facing the goal at a 135 degree angle.
 
-    //    private final Pose scorePose = new Pose(60, 84, Math.toRadians(135)); // Scoring Pose of our robot. It is facing the goal at a 135 degree angle.
-    private final Pose pickup1Pose = new Pose(106, 84, Math.toRadians(0)); // Highest (First Set) of Artifacts from the Spike Mark.
-    private final Pose Collect1_1 = new Pose(119, 84, Math.toRadians(10));
-    private final Pose Collect1_2 = new Pose(126, 84, Math.toRadians(10));
+    private final Pose pickup1Pose = new Pose(106, 80, Math.toRadians(10)); // Highest (First Set) of Artifacts from the Spike Mark.
+    private final Pose Collect1_1 = new Pose(119, 80, Math.toRadians(10));
+    private final Pose Collect1_2 = new Pose(126, 80, Math.toRadians(10));
     //    private final Pose Collect1_3 = new Pose(114, 74, Math.toRadians(90));
 //    private final Pose Collect1_4 = new Pose(120, 74, Math.toRadians(90));
-    private final Pose pickup2Pose = new Pose(106, 60, Math.toRadians(10)); // Middle (Second Set) of Artifacts from the Spike Mark.
-    private final Pose Collect2_1 = new Pose(114, 60, Math.toRadians(10));
-    private final Pose Collect2_2 = new Pose(119, 60, Math.toRadians(10));
-    private final Pose Collect2_3 = new Pose(126, 60, Math.toRadians(10));
+    private final Pose pickup2Pose = new Pose(105, 56, Math.toRadians(20)); // Middle (Second Set) of Artifacts from the Spike Mark.
+    private final Pose Collect2_1 = new Pose(112, 56, Math.toRadians(10));
+    private final Pose Collect2_2 = new Pose(118, 56, Math.toRadians(10));
+    private final Pose Collect2_3 = new Pose(128, 56, Math.toRadians(10));
     private final Pose pickup3Pose = new Pose(106, 36, Math.toRadians(10)); // Lowest (Third Set) of Artifacts from the Spike Mark.
     private final Pose Collect3_1 = new Pose(114, 36, Math.toRadians(10));
     private final Pose Collect3_2 = new Pose(126, 36, Math.toRadians(10));
-    private final Pose LeavePose = new Pose(106, 84, Math.toRadians(10)); // Leave Pose at the end of Auto.
+    private final Pose LeavePose = new Pose(106, 78, Math.toRadians(10)); // Leave Pose at the end of Auto.
 
     //    private Path scanTag;
     private Path scorePreload;
@@ -70,6 +69,7 @@ public class Decode_Auto1_Red_PGP extends OpMode {
 
     //    private PathChain scorePreload1, grabPickup1, grabPickup1_1, CollectSet1_1, CollectSet1_1_1, CollectSet1_2, CollectSet1_2_1, CollectSet1_3, CollectSet1_3_1, CollectSet1_4, CollectSet1_4_1, scorePickup1, scorePickup1_1, grabPickup2, grabPickup2_1, CollectSet2_1, CollectSet2_1_1, CollectSet2_2, CollectSet2_2_1, CollectSet2_3, CollectSet2_3_1, scorePickup2, scorePickup2_1, grabPickup3, CollectSet3_1, CollectSet3_2, scorePickup3, Leave,Leave1;
     private PathChain scorePreload1, grabPickup1, grabPickup1_1, CollectSet1_1, CollectSet1_1_1, CollectSet1_2, CollectSet1_2_1, scorePickup1, scorePickup1_1, grabPickup2, grabPickup2_1, CollectSet2_1, CollectSet2_1_1, CollectSet2_2, CollectSet2_2_1, CollectSet2_3, CollectSet2_3_1, scorePickup2, scorePickup2_1, grabPickup3, CollectSet3_1, CollectSet3_2, scorePickup3, Leave,Leave1;
+
 
     public void buildPaths() {
         /* This is our scorePreload path. We are using a BezierLine, which is a straight line. */
@@ -241,10 +241,10 @@ public class Decode_Auto1_Red_PGP extends OpMode {
 
             case 2:
                 launcherMotor.setPower(-0.7);
-                canopyServo.setPower(-40);
+                canopyServo.setPower(-0.20);
 
                 try {
-                    sleep(1500);
+                    sleep(1000);
                 } catch (InterruptedException e) {
                     throw new RuntimeException(e);
                 }
@@ -259,7 +259,7 @@ public class Decode_Auto1_Red_PGP extends OpMode {
                 }
                 lliftServo.setPosition(0.2) ;
 
-                launcherMotor.setPower(-0.75);
+                launcherMotor.setPower(-0.70);
 
                 try {
                     sleep(1000);
@@ -274,7 +274,7 @@ public class Decode_Auto1_Red_PGP extends OpMode {
                     throw new RuntimeException(e);
                 }
                 rliftServo.setPosition(0.05);
-                launcherMotor.setPower(-0.75);
+                launcherMotor.setPower(-0.70);
 
                 try {
                     sleep(1000);
@@ -291,7 +291,7 @@ public class Decode_Auto1_Red_PGP extends OpMode {
                 lliftServo.setPosition(0.2) ;
 
                 /* Score Preload End*/
-                setPathState(3);
+                setPathState(17);
 
                 break;
 
@@ -453,7 +453,7 @@ public class Decode_Auto1_Red_PGP extends OpMode {
                 }
                 lliftServo.setPosition(0.2) ;
 
-                launcherMotor.setPower(-0.75);
+                launcherMotor.setPower(-0.70);
 
                 try {
                     sleep(1000);
@@ -468,7 +468,7 @@ public class Decode_Auto1_Red_PGP extends OpMode {
                     throw new RuntimeException(e);
                 }
                 rliftServo.setPosition(0.05);
-                launcherMotor.setPower(-0.75);
+                launcherMotor.setPower(-0.70);
 
                 try {
                     sleep(1000);
@@ -510,7 +510,7 @@ public class Decode_Auto1_Red_PGP extends OpMode {
             case 19:
                 /* This case checks the robot's position and will wait until the robot position is close (1 inch away) from the pickup2Pose's position */
 
-                canopyServo.setPower(-40);
+                canopyServo.setPower(-0.20);
                 sorterServo.setPosition(0.15);
                 /* Since this is a pathChain, we can have Pedro hold the end point while we are scoring the sample */
                 setPathState(20);
@@ -592,7 +592,7 @@ public class Decode_Auto1_Red_PGP extends OpMode {
                 break;
             case 28:
                 launcherMotor.setPower(-0.7);
-                canopyServo.setPower(-40);
+                canopyServo.setPower(-0.20);
 
                 try {
                     sleep(1000);
@@ -608,7 +608,7 @@ public class Decode_Auto1_Red_PGP extends OpMode {
                 }
                 lliftServo.setPosition(0.2) ;
 
-                launcherMotor.setPower(-0.75);
+                launcherMotor.setPower(-0.70);
 
                 try {
                     sleep(1000);
@@ -623,7 +623,7 @@ public class Decode_Auto1_Red_PGP extends OpMode {
                     throw new RuntimeException(e);
                 }
                 rliftServo.setPosition(0.05);
-                launcherMotor.setPower(-0.75);
+                launcherMotor.setPower(-0.70);
 
                 try {
                     sleep(1000);
@@ -655,7 +655,7 @@ public class Decode_Auto1_Red_PGP extends OpMode {
                 } catch (InterruptedException e) {
                     throw new RuntimeException(e);
                 }
-                setPathState(99);
+                setPathState(30);
 //                }
                 break;
             case 30:
@@ -663,7 +663,7 @@ public class Decode_Auto1_Red_PGP extends OpMode {
 //                if (!follower.isBusy()) {
                 //intakeServo.setPower(100);
                 intakeMotor.setPower(1);
-                canopyServo.setPower(-40);
+                canopyServo.setPower(-0.20);
                 sorterServo.setPosition(0.62);
                 /* Since this is a pathChain, we can have Pedro hold the end point while we are scoring the sample */
                 follower.followPath(CollectSet3_1, true);
@@ -706,7 +706,7 @@ public class Decode_Auto1_Red_PGP extends OpMode {
                 }
                 lliftServo.setPosition(0.2) ;
 
-                launcherMotor.setPower(-0.75);
+                launcherMotor.setPower(-0.70);
 
                 try {
                     sleep(1000);
@@ -722,7 +722,7 @@ public class Decode_Auto1_Red_PGP extends OpMode {
                     throw new RuntimeException(e);
                 }
                 rliftServo.setPosition(0.05);
-                launcherMotor.setPower(-0.75);
+                launcherMotor.setPower(-0.70);
 
                 try {
                     sleep(1000);
